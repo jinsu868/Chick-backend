@@ -15,6 +15,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import story.cheek.security.*;
 import story.cheek.security.oauth2.OAuth2AuthenticationFailureHandler;
 import story.cheek.security.oauth2.OAuth2AuthenticationSuccessHandler;
+import story.cheek.security.util.JwtExtractor;
 
 @Configuration
 @EnableWebSecurity
@@ -22,6 +23,7 @@ import story.cheek.security.oauth2.OAuth2AuthenticationSuccessHandler;
 public class SecurityConfig {
     private static final String ADMIN = "ADMIN";
     private final TokenProvider tokenProvider;
+    private final JwtExtractor jwtExtractor;
     private final CustomUserDetailsService customUserDetailsService;
     private final CustomOAuth2UserService customOAuth2UserService;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
@@ -60,6 +62,8 @@ public class SecurityConfig {
                         authorizationManagerRequestMatcherRegistry ->
                                 authorizationManagerRequestMatcherRegistry
                                         .requestMatchers("/").permitAll()
+                                        .requestMatchers("/login", "/error").permitAll()
+                                        .requestMatchers("/api/v1/refresh").permitAll()
                                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oAuth2LoginConfigurer -> {
@@ -76,7 +80,7 @@ public class SecurityConfig {
                     oAuth2LoginConfigurer.successHandler(oAuth2AuthenticationSuccessHandler);
                     oAuth2LoginConfigurer.failureHandler(oAuth2AuthenticationFailureHandler);
                 })
-                .addFilterBefore(new TokenAuthenticationFilter(tokenProvider, customUserDetailsService), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new TokenAuthenticationFilter(tokenProvider, customUserDetailsService, jwtExtractor), UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 }

@@ -46,6 +46,18 @@ public class TokenProvider implements InitializingBean {
                 .compact();
     }
 
+    public String createAccessTokenByRefreshToken(UserPrincipal userPrincipal) {
+        Date now = new Date();
+        Date expiryDate = new Date(now.getTime() + tokenValidityInMilliseconds);
+
+        return Jwts.builder()
+                .setSubject(userPrincipal.getUsername())
+                .setIssuedAt(now)
+                .setExpiration(expiryDate)
+                .signWith(key, SignatureAlgorithm.HS512)
+                .compact();
+    }
+
     public String createRefreshToken() {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
@@ -55,6 +67,19 @@ public class TokenProvider implements InitializingBean {
                 .setExpiration(expiryDate)
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
+    }
+
+    public Long getExpiration(String token) {
+        Date now = new Date();
+
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+        Date expiration = claims.getExpiration();
+
+        return (expiration.getTime() - now.getTime()) / 1000;
     }
 
     public String getEmailFromToken(String token) {

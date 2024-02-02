@@ -16,13 +16,11 @@ public class OAuth2UserInfoFactory {
         }
 
         if (registrationId.equalsIgnoreCase(AuthProvider.kakao.toString())) {
-            System.out.println("kakao " + attributes);
             return new KakaoOAuth2UserInfo(attributes);
         }
 
         if (registrationId.equalsIgnoreCase(AuthProvider.naver.toString())) {
             Map<String, Object> naverAttributes = (Map<String, Object>) attributes.get("response");
-            System.out.println("naver " + naverAttributes);
             return new NaverOAuth2UserInfo(naverAttributes);
         }
 

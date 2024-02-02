@@ -9,7 +9,6 @@ public class GoogleOAuth2UserInfo extends OAuth2UserInfo{
 
     @Override
     public String getId() {
-        System.out.println("오우 " + attributes);
         return (String)attributes.get("sub");
     }
 
@@ -25,7 +24,6 @@ public class GoogleOAuth2UserInfo extends OAuth2UserInfo{
 
     @Override
     public String getImageUrl() {
-        System.out.println("이미지 " + (String)attributes.get("picture"));
         return (String)attributes.get("picture");
     }
 }

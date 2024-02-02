@@ -12,6 +12,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 import story.cheek.common.exception.ErrorCode;
 import story.cheek.security.HttpCookieOAuth2AuthorizationRequestRepository;
 import story.cheek.security.TokenProvider;
+import story.cheek.security.UserPrincipal;
+import story.cheek.security.refreshToken.service.RefreshTokenService;
 import story.cheek.util.CookieUtils;
 
 import java.io.IOException;
@@ -26,11 +28,14 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     private String redirectUri;
     private TokenProvider tokenProvider;
     private HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
+    private RefreshTokenService refreshTokenService;
 
     OAuth2AuthenticationSuccessHandler(TokenProvider tokenProvider,
-                                       HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository) {
+                                       HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository,
+                                       RefreshTokenService refreshTokenService) {
         this.tokenProvider = tokenProvider;
         this.httpCookieOAuth2AuthorizationRequestRepository = httpCookieOAuth2AuthorizationRequestRepository;
+        this.refreshTokenService = refreshTokenService;
     }
 
     @Override
@@ -62,13 +67,27 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         // getDefaultTargetUrl 체크 && 쿠키
         String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
         String accessToken = tokenProvider.createAccessToken(authentication);
+        String refreshToken = tokenProvider.createRefreshToken();
+
+        int cookieMaxAge = tokenProvider.getExpiration(refreshToken).intValue() / 60;
+
+        CookieUtils.deleteCookie(request, response, "refresh_token");
+        CookieUtils.addCookie(response, "refresh_token", refreshToken, cookieMaxAge);
+
+        saveRefreshToken(refreshToken, authentication);
 
         return UriComponentsBuilder.fromUriString(targetUrl)
                 .queryParam("token", accessToken)
                 .build().toUriString();
     }
 
-    // 체크
+    private void saveRefreshToken(String refreshToken, Authentication authentication) {
+        UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
+        Long memberId = principal.getMember().getId();
+
+        refreshTokenService.saveRefreshToken(refreshToken, memberId);
+    }
+
     protected void clearAuthenticationAttributes(HttpServletRequest request, HttpServletResponse response) {
         super.clearAuthenticationAttributes(request);
         httpCookieOAuth2AuthorizationRequestRepository.removeAuthorizationRequestCookies(request, response);
