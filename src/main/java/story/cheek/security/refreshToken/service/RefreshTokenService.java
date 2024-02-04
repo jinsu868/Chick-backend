@@ -25,11 +25,8 @@ public class RefreshTokenService {
     public String getAccessToken(String token) {
         RefreshToken refreshToken = findRefreshTokenByToken(token);
         tokenProvider.validateToken(refreshToken.getToken());
-        UserPrincipal refreshTokenOwner = UserPrincipal.create(findRefreshTokenOwner(refreshToken.getMemberId()));
-
-        refreshTokenOwner.getUsername();
-
-        return tokenProvider.createAccessTokenByRefreshToken(refreshTokenOwner);
+        Member refreshTokenOwner = findRefreshTokenOwner(refreshToken.getMemberId());
+        return tokenProvider.createAccessTokenByRefreshToken(refreshTokenOwner.getName());
     }
 
     @Transactional

@@ -32,9 +32,4 @@ public class Member {
     public String roleName() {
         return role.name();
     }
-
-    public Member OAuth2update(String name) {
-        this.name = name;
-        return this;
-    }
 }

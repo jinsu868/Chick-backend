@@ -12,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import story.cheek.member.repository.MemberRepository;
 import story.cheek.security.*;
 import story.cheek.security.oauth2.OAuth2AuthenticationFailureHandler;
 import story.cheek.security.oauth2.OAuth2AuthenticationSuccessHandler;
@@ -24,7 +25,7 @@ public class SecurityConfig {
     private static final String ADMIN = "ADMIN";
     private final TokenProvider tokenProvider;
     private final JwtExtractor jwtExtractor;
-    private final CustomUserDetailsService customUserDetailsService;
+    private final MemberRepository memberRepository;
     private final CustomOAuth2UserService customOAuth2UserService;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
@@ -80,7 +81,7 @@ public class SecurityConfig {
                     oAuth2LoginConfigurer.successHandler(oAuth2AuthenticationSuccessHandler);
                     oAuth2LoginConfigurer.failureHandler(oAuth2AuthenticationFailureHandler);
                 })
-                .addFilterBefore(new TokenAuthenticationFilter(tokenProvider, customUserDetailsService, jwtExtractor), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new TokenAuthenticationFilter(tokenProvider, jwtExtractor, memberRepository), UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 }

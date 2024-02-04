@@ -1,5 +1,6 @@
 package story.cheek.security;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -8,6 +9,8 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import story.cheek.common.exception.ErrorCode;
+import story.cheek.common.exception.NotFoundMemberException;
 import story.cheek.member.domain.AuthProvider;
 import story.cheek.member.domain.Member;
 import story.cheek.member.domain.Role;
@@ -19,12 +22,9 @@ import story.cheek.security.oauth2.OAuth2UserInfoFactory;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     private final MemberRepository memberRepository;
-
-    public CustomOAuth2UserService(MemberRepository memberRepository) {
-        this.memberRepository = memberRepository;
-    }
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest oAuth2UserRequest) {
@@ -52,21 +52,18 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         Member member;
 
         if (memberOptional.isPresent()) {
-            member = memberOptional.get();
+            member = memberOptional.orElseThrow(
+                    () -> new NotFoundMemberException(ErrorCode.MEMBER_NOT_FOUND)
+            );
             if (!member.getProvider().toString().equalsIgnoreCase(AuthProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId()).toString())) {
                 throw new OAuth2AuthenticationProcessingException("이미 등록된 회원입니다.");
             }
 
-            member = updateExistingUser(member, oAuth2UserInfo);
         } else {
             member = registerNewMember(oAuth2UserRequest, oAuth2UserInfo);
         }
 
         return UserPrincipal.create(member, oAuth2UserInfo.getAttributes());
-    }
-
-    private Member updateExistingUser(Member member, OAuth2UserInfo oAuth2UserInfo) {
-        return member.OAuth2update(oAuth2UserInfo.getName());
     }
 
     private Member registerNewMember(OAuth2UserRequest oAuth2UserRequest , OAuth2UserInfo oAuth2UserInfo) {

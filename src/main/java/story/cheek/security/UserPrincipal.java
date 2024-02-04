@@ -16,7 +16,7 @@ public class UserPrincipal implements UserDetails, OAuth2User {
     private final Member member;
     private Map<String, Object> attributes;
 
-    public UserPrincipal(Member member) {
+    private UserPrincipal(Member member) {
         this.member = member;
     }
 
