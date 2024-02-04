@@ -1,0 +1,21 @@
+---
+spring:
+  profiles: # 로컬 스프링 용
+    active: local
+    include: oauth
+---
+spring:
+  profiles:
+    active: dev # 로컬 도커 테스트 용
+    include: oauth
+---
+spring:
+  profiles:
+    active: prod
+    include: oauth
+
+# --- 테스트 코드용
+# spring:
+#  profiles:
+#    active: test
+#    include: oauth
