@@ -11,8 +11,10 @@ public enum ErrorCode {
     MEMBER_NOT_FOUND(400, "C_001", "Member를 찾을 수 없습니다."),
     ENTITY_NOT_FOUND(400, "C_002", "지정한 Entity를 찾을 수 없습니다."),
     QUESTION_NOT_FOUND(400, "C_003", "Question을 찾을 수 없습니다."),
+    STORY_NOT_FOUND(400, "C_006", "Story를 찾을 수 없습니다."),
     FORBIDDEN_QUESTION_UPDATE(401, "C_004", "질문을 수정할 권한이 없습니다."),
     FORBIDDEN_STORY_CREATE(401, "C_005", "스토리를 생성할 권한이 없습니다.");
+
 
 
     private final int status;

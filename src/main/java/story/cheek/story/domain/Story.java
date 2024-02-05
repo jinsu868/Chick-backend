@@ -40,7 +40,7 @@ public class Story extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
-    private Member writer;
+    private Member member;
 
     private Story(
             Occupation occupation,
@@ -51,7 +51,7 @@ public class Story extends BaseEntity {
         this.occupation = occupation;
         this.imageUrl = imageUrl;
         this.question = question;
-        this.writer = writer;
+        this.member = writer;
     }
 
     public static Story createStory(

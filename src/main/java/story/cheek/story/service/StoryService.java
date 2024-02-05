@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import story.cheek.common.exception.ErrorCode;
 import story.cheek.common.exception.NotFoundQuestionException;
+import story.cheek.common.exception.NotFoundStoryException;
 import story.cheek.common.exception.StoryForbiddenException;
 import story.cheek.member.domain.Member;
 import story.cheek.member.repository.MemberRepository;
@@ -14,6 +15,7 @@ import story.cheek.question.domain.Question;
 import story.cheek.question.repository.QuestionRepository;
 import story.cheek.story.domain.Story;
 import story.cheek.story.dto.request.StoryCreateRequest;
+import story.cheek.story.dto.response.StoryDetailResponse;
 import story.cheek.story.repository.StoryRepository;
 
 @Service
@@ -46,9 +48,20 @@ public class StoryService {
         return story.getId();
     }
 
+    public StoryDetailResponse findDetailById(Member member, Long storyId) {
+        // TODO: 접근 권한 체크 NOT GUEST & BLIND (2차 스프린트)
+
+        Story story = storyRepository.findById(storyId)
+                .orElseThrow(() -> new NotFoundStoryException(STORY_NOT_FOUND));
+
+        return StoryDetailResponse.of(story);
+    }
+
+
     private void validateStoryCreate(Member member) {
         if (!member.canMakeStory()) {
             throw new StoryForbiddenException(FORBIDDEN_STORY_CREATE);
         }
     }
+
 }

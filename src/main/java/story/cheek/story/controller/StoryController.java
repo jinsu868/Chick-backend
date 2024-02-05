@@ -4,6 +4,8 @@ import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +16,7 @@ import story.cheek.member.domain.Member;
 import story.cheek.security.CurrentMember;
 import story.cheek.story.dto.request.StoryCreateRequest;
 import story.cheek.story.dto.request.StoryCreateRequestWithoutImage;
+import story.cheek.story.dto.response.StoryDetailResponse;
 import story.cheek.story.service.StoryService;
 
 @RestController
@@ -37,4 +40,14 @@ public class StoryController {
                 .build();
     }
 
+    @GetMapping("/{storyId}")
+    public ResponseEntity<StoryDetailResponse> findById(
+            @CurrentMember Member member,
+            @PathVariable Long storyId
+    ) {
+
+        StoryDetailResponse response = storyService.findDetailById(member, storyId);
+
+        return ResponseEntity.ok(response);
+    }
 }
