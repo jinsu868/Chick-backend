@@ -21,6 +21,9 @@ public class Member {
     private String email;
     private String image;
 
+    @Column(nullable = false)
+    private boolean isMentor;
+
     @Enumerated(EnumType.STRING)
     private Role role;
 
@@ -31,5 +34,9 @@ public class Member {
 
     public String roleName() {
         return role.name();
+    }
+
+    public boolean canMakeStory() {
+        return isMentor;
     }
 }

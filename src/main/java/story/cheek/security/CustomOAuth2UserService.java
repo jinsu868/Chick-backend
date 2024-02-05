@@ -75,6 +75,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 .provider(AuthProvider.valueOf(provider))
                 .providerId(oAuth2UserInfo.getId())
                 .role(Role.ROLE_USER)
+                .isMentor(false)
                 .build();
 
         return memberRepository.save(member);
