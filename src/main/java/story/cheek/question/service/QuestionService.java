@@ -9,7 +9,7 @@ import story.cheek.common.exception.NotFoundQuestionException;
 import story.cheek.common.exception.QuestionForbiddenException;
 import story.cheek.member.domain.Member;
 import story.cheek.member.repository.MemberRepository;
-import story.cheek.question.Question;
+import story.cheek.question.domain.Question;
 import story.cheek.question.dto.request.QuestionCreateRequest;
 import story.cheek.question.dto.request.QuestionUpdateRequest;
 import story.cheek.question.dto.response.QuestionDetailResponse;

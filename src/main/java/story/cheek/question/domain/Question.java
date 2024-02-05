@@ -1,4 +1,4 @@
-package story.cheek.question;
+package story.cheek.question.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

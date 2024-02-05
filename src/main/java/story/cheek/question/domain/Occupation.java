@@ -1,4 +1,4 @@
-package story.cheek.question;
+package story.cheek.question.domain;
 
 public enum Occupation {
     DEVELOP("DEVELOP", "개발"),

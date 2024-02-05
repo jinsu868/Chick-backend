@@ -1,8 +1,8 @@
 package story.cheek.question.dto.response;
 
 import java.time.LocalDateTime;
-import story.cheek.question.Occupation;
-import story.cheek.question.Question;
+import story.cheek.question.domain.Occupation;
+import story.cheek.question.domain.Question;
 
 public record QuestionDetailResponse(
         Long id,
