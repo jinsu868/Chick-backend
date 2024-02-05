@@ -36,5 +36,30 @@ public class Question extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
-    private Member member;
+    private Member writer;
+
+    private Question(
+            Occupation occupation,
+            String title,
+            String content,
+            Member writer
+    ) {
+        this.occupation = occupation;
+        this.title = title;
+        this.content = content;
+        this.writer = writer;
+    }
+
+    public static Question createQuestion(
+            Occupation occupation,
+            String title,
+            String content,
+            Member writer
+    ) {
+        return new Question(
+                occupation,
+                title,
+                content,
+                writer);
+    }
 }
