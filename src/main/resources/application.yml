@@ -3,6 +3,25 @@ spring:
   profiles: # 로컬 스프링 용
     active: local
     include: oauth
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/cheek
+    username: root
+    password: ans8688?
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: 'true'
+    show-sql: 'true'
+
+jwt:
+  secret: 'qwjedi19hrb18odxkcnwgkjkladhnw9182nmsd0s89y12mne123mksnsaujfdhowkrn3k45786zxnmcvwjehrkeljhfjwh1'
+  access-token-validity: 10000000
+  refresh-token-validity: 1000000000
+
 ---
 spring:
   profiles:
