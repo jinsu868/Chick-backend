@@ -6,6 +6,7 @@
 
 ### YML ###
 *.yml
+application.yml
 
 HELP.md
 
