@@ -2,6 +2,7 @@ package story.cheek.question.service;
 
 import static story.cheek.common.exception.ErrorCode.*;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +14,7 @@ import story.cheek.question.domain.Question;
 import story.cheek.question.dto.request.QuestionCreateRequest;
 import story.cheek.question.dto.request.QuestionUpdateRequest;
 import story.cheek.question.dto.response.QuestionDetailResponse;
+import story.cheek.question.dto.response.QuestionResponse;
 import story.cheek.question.repository.QuestionRepository;
 
 @Service
@@ -20,7 +22,6 @@ import story.cheek.question.repository.QuestionRepository;
 @RequiredArgsConstructor
 public class QuestionService {
 
-    private final MemberRepository memberRepository;
     private final QuestionRepository questionRepository;
 
     @Transactional
@@ -63,5 +64,14 @@ public class QuestionService {
         if (question.getWriter().getId() != member.getId()) {
             throw new QuestionForbiddenException(FORBIDDEN_QUESTION_UPDATE);
         }
+    }
+
+    public List<QuestionResponse> findAll(Member member) {
+        //member 읽기 권한 체크 (2차 스프린트에서 구현)
+
+        return questionRepository.findAllByOrderByIdDesc()
+                .stream()
+                .map(QuestionResponse::from)
+                .toList();
     }
 }
