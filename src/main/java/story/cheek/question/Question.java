@@ -62,4 +62,14 @@ public class Question extends BaseEntity {
                 content,
                 writer);
     }
+
+    public void update(
+            Occupation occupation,
+            String title,
+            String content
+    ) {
+       this.occupation = occupation;
+       this.title = title;
+       this.content = content;
+    }
 }
