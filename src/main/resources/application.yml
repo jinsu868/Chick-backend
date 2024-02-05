@@ -19,7 +19,7 @@ spring:
 
 jwt:
   secret: 'qwjedi19hrb18odxkcnwgkjkladhnw9182nmsd0s89y12mne123mksnsaujfdhowkrn3k45786zxnmcvwjehrkeljhfjwh1'
-  access-token-validity: 10000000
+  access-token-validity: 10000000000
   refresh-token-validity: 1000000000
 
 ---

@@ -4,6 +4,7 @@ import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import story.cheek.member.domain.Member;
@@ -21,7 +22,7 @@ public class QuestionController {
     @PostMapping
     public ResponseEntity<Void> create(
             @CurrentMember Member member,
-            QuestionCreateRequest questionCreateRequest
+            @RequestBody QuestionCreateRequest questionCreateRequest
     ) {
 
         Long savedId = questionService.save(member.getEmail(), questionCreateRequest);

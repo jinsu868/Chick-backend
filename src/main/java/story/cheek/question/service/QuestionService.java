@@ -19,6 +19,7 @@ public class QuestionService {
     private final MemberRepository memberRepository;
     private final QuestionRepository questionRepository;
 
+    @Transactional
     public Long save(String email, QuestionCreateRequest request) {
         Member member = memberRepository.findByEmail(email).orElseThrow(
                 () -> new NotFoundMemberException(ErrorCode.MEMBER_NOT_FOUND));
