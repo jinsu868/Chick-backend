@@ -13,6 +13,7 @@ import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 import story.cheek.common.domain.BaseEntity;
 import story.cheek.member.domain.Member;
 import story.cheek.question.domain.Occupation;
@@ -33,6 +34,9 @@ public class Story extends BaseEntity {
 
     @Column(nullable = false)
     private String imageUrl;
+
+    @ColumnDefault("0")
+    int likeCount;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "question_id")

@@ -1,22 +1,27 @@
 package story.cheek.story.controller;
 
 import java.net.URI;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import story.cheek.common.constant.SortType;
 import story.cheek.member.domain.Member;
 import story.cheek.security.CurrentMember;
 import story.cheek.story.dto.request.StoryCreateRequest;
 import story.cheek.story.dto.request.StoryCreateRequestWithoutImage;
 import story.cheek.story.dto.response.StoryDetailResponse;
+import story.cheek.story.dto.response.StoryResponse;
 import story.cheek.story.service.StoryService;
 
 @RestController
@@ -47,6 +52,18 @@ public class StoryController {
     ) {
 
         StoryDetailResponse response = storyService.findDetailById(member, storyId);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping
+    public ResponseEntity<Slice<StoryResponse>> findAll(
+            @CurrentMember Member member,
+            @PageableDefault(size = 10) Pageable pageable,
+            SortType sortType
+    ) {
+
+        Slice<StoryResponse> response = storyService.findAll(member, pageable, sortType);
 
         return ResponseEntity.ok(response);
     }
