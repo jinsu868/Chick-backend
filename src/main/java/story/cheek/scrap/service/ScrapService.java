@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import story.cheek.common.exception.ErrorCode;
 import story.cheek.common.exception.NotFoundMemberException;
 import story.cheek.common.exception.NotFoundStoryException;
+import story.cheek.common.exception.ScrapDuplicationException;
 import story.cheek.member.domain.Member;
 import story.cheek.member.repository.MemberRepository;
 import story.cheek.scrap.dto.response.ScrapResponse;
@@ -33,6 +34,7 @@ public class ScrapService {
         Story story = storyRepository.findById(storyId)
                 .orElseThrow(() -> new NotFoundStoryException(STORY_NOT_FOUND));
 
+        validateDuplicateScrap(member);
         Scrap scrap = Scrap.of(member, story);
         scrapRepository.save(scrap);
 
@@ -48,5 +50,11 @@ public class ScrapService {
                 .stream()
                 .map(ScrapResponse::from)
                 .toList();
+    }
+
+    private void validateDuplicateScrap(Member member) {
+        if (scrapRepository.existsByMember(member)) {
+            throw new ScrapDuplicationException(ALREADY_STORY_SCRAP);
+        }
     }
 }

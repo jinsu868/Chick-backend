@@ -9,4 +9,6 @@ import story.cheek.story.domain.Scrap;
 public interface ScrapRepository extends JpaRepository<Scrap, Long> {
 
     List<Scrap> findAllByMember(Member member);
+
+    boolean existsByMember(Member member);
 }
