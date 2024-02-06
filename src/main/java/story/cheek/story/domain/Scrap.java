@@ -29,4 +29,19 @@ public class Scrap extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "story_id")
     private Story story;
+
+    private Scrap(
+            Member member,
+            Story story
+    ) {
+        this.member = member;
+        this.story = story;
+    }
+
+    public static Scrap of(
+            Member member,
+            Story story
+    ) {
+        return new Scrap(member, story);
+    }
 }
