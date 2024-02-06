@@ -8,7 +8,6 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import story.cheek.common.constant.SortType;
-import story.cheek.common.exception.ErrorCode;
 import story.cheek.common.exception.NotFoundQuestionException;
 import story.cheek.common.exception.NotFoundStoryException;
 import story.cheek.common.exception.StoryForbiddenException;

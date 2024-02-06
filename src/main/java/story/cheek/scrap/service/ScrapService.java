@@ -6,7 +6,6 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import story.cheek.common.exception.ErrorCode;
 import story.cheek.common.exception.NotFoundMemberException;
 import story.cheek.common.exception.NotFoundScrapException;
 import story.cheek.common.exception.NotFoundStoryException;
