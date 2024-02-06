@@ -8,8 +8,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import story.cheek.common.exception.ErrorCode;
 import story.cheek.common.exception.NotFoundMemberException;
+import story.cheek.common.exception.NotFoundScrapException;
 import story.cheek.common.exception.NotFoundStoryException;
 import story.cheek.common.exception.ScrapDuplicationException;
+import story.cheek.common.exception.ScrapForbiddenException;
 import story.cheek.member.domain.Member;
 import story.cheek.member.repository.MemberRepository;
 import story.cheek.scrap.dto.response.ScrapResponse;
@@ -29,8 +31,6 @@ public class ScrapService {
 
     @Transactional
     public Long save(Member member, Long storyId) {
-        // TODO: 차단 여부 체크 (2차 스프린트)
-
         Story story = storyRepository.findById(storyId)
                 .orElseThrow(() -> new NotFoundStoryException(STORY_NOT_FOUND));
 
@@ -42,7 +42,6 @@ public class ScrapService {
     }
 
     public List<ScrapResponse> findAllByMemberId(Long memberId) {
-
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new NotFoundMemberException(MEMBER_NOT_FOUND));
 
@@ -50,6 +49,22 @@ public class ScrapService {
                 .stream()
                 .map(ScrapResponse::from)
                 .toList();
+    }
+
+    @Transactional
+    public void delete(Member member, Long scrapId) {
+        Scrap scrap = scrapRepository.findById(scrapId)
+                .orElseThrow(() -> new NotFoundScrapException(SCRAP_NOT_FOUND));
+
+        validateScrapDelete(member, scrap);
+
+        scrapRepository.deleteById(scrapId);
+    }
+
+    private void validateScrapDelete(Member member, Scrap scrap) {
+        if (scrap.getMember().getId() != member.getId()) {
+            throw new ScrapForbiddenException(FORBIDDEN_SCRAP_DELETE);
+        }
     }
 
     private void validateDuplicateScrap(Member member) {
