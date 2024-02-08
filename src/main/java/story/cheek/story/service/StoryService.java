@@ -14,7 +14,7 @@ import story.cheek.question.domain.Question;
 import story.cheek.question.repository.QuestionRepository;
 import story.cheek.story.domain.Story;
 import story.cheek.story.dto.request.StoryCreateRequest;
-import story.cheek.story.dto.response.SliceResponse;
+import story.cheek.common.dto.SliceResponse;
 import story.cheek.story.dto.response.StoryDetailResponse;
 import story.cheek.story.dto.response.StoryResponse;
 import story.cheek.story.repository.StoryRepository;

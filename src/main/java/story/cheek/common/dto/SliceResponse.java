@@ -1,4 +1,4 @@
-package story.cheek.story.dto.response;
+package story.cheek.common.dto;
 
 import java.util.List;
 

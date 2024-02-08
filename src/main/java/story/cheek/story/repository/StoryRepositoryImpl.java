@@ -10,7 +10,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import story.cheek.common.constant.SortType;
-import story.cheek.story.dto.response.SliceResponse;
+import story.cheek.common.dto.SliceResponse;
 import story.cheek.story.dto.response.StoryResponse;
 
 @RequiredArgsConstructor

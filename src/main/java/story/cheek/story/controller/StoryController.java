@@ -17,7 +17,7 @@ import story.cheek.member.domain.Member;
 import story.cheek.security.CurrentMember;
 import story.cheek.story.dto.request.StoryCreateRequest;
 import story.cheek.story.dto.request.StoryCreateRequestWithoutImage;
-import story.cheek.story.dto.response.SliceResponse;
+import story.cheek.common.dto.SliceResponse;
 import story.cheek.story.dto.response.StoryDetailResponse;
 import story.cheek.story.dto.response.StoryResponse;
 import story.cheek.story.service.StoryService;
