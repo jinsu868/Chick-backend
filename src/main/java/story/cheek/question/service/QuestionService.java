@@ -18,7 +18,6 @@ import story.cheek.question.dto.response.QuestionResponse;
 import story.cheek.question.repository.QuestionRepository;
 
 @Service
-@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class QuestionService {
 
