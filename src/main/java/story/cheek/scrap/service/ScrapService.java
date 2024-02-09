@@ -21,7 +21,6 @@ import story.cheek.story.repository.StoryRepository;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class ScrapService {
 
     private final ScrapRepository scrapRepository;
@@ -61,7 +60,7 @@ public class ScrapService {
     }
 
     private void validateScrapDelete(Member member, Scrap scrap) {
-        if (scrap.getMember().getId() != member.getId()) {
+        if (member.isScrapPermission(scrap)) {
             throw new ScrapForbiddenException(FORBIDDEN_SCRAP_DELETE);
         }
     }

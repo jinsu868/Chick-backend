@@ -20,7 +20,6 @@ import story.cheek.story.dto.response.StoryResponse;
 import story.cheek.story.repository.StoryRepository;
 
 @Service
-@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class StoryService {
 

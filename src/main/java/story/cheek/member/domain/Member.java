@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import story.cheek.story.domain.Scrap;
+import story.cheek.story.domain.Story;
 
 @Entity
 @Getter
@@ -38,5 +40,9 @@ public class Member {
 
     public boolean canMakeStory() {
         return isMentor;
+    }
+
+    public boolean isScrapPermission(Scrap scrap) {
+        return id == scrap.getMember().id;
     }
 }
