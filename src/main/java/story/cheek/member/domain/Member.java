@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import story.cheek.story.domain.Scrap;
+import story.cheek.story.domain.Story;
 
 @Entity
 @Getter
@@ -21,6 +23,9 @@ public class Member {
     private String email;
     private String image;
 
+    @Column(nullable = false)
+    private boolean isMentor;
+
     @Enumerated(EnumType.STRING)
     private Role role;
 
@@ -31,5 +36,13 @@ public class Member {
 
     public String roleName() {
         return role.name();
+    }
+
+    public boolean canMakeStory() {
+        return isMentor;
+    }
+
+    public boolean isScrapPermission(Scrap scrap) {
+        return id == scrap.getMember().id;
     }
 }
