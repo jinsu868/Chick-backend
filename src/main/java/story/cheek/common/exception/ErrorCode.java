@@ -16,7 +16,9 @@ public enum ErrorCode {
     FORBIDDEN_STORY_CREATE(401, "C_005", "스토리를 생성할 권한이 없습니다."),
     FORBIDDEN_SCRAP_DELETE(401, "C_008", "스크랩을 삭제할 권한이 없습니다."),
     ALREADY_STORY_SCRAP(400, "C_006", "이미 해당 스토리를 스크랩했습니다."),
-    SCRAP_NOT_FOUND(400, "C_007", "Scrap을 찾을 수 없습니다.");
+    SCRAP_NOT_FOUND(400, "C_007", "Scrap을 찾을 수 없습니다."),
+    FAILED_IMAGE_UPLOAD(400, "C_009", "이미지 업로드에 실패했습니다."),
+    INVALID_FILE_EXTENSION(400, "C_010", "유효하지 않은 파일 확장자입니다.");
 
 
 

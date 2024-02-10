@@ -9,6 +9,7 @@ import story.cheek.common.constant.SortType;
 import story.cheek.common.exception.NotFoundQuestionException;
 import story.cheek.common.exception.NotFoundStoryException;
 import story.cheek.common.exception.StoryForbiddenException;
+import story.cheek.common.image.S3Service;
 import story.cheek.member.domain.Member;
 import story.cheek.question.domain.Question;
 import story.cheek.question.repository.QuestionRepository;
@@ -25,20 +26,19 @@ public class StoryService {
 
     private final StoryRepository storyRepository;
     private final QuestionRepository questionRepository;
+    private final S3Service s3Service;
 
     @Transactional
     public Long save(Member member, StoryCreateRequest request) {
         validateStoryCreate(member);
-
-        // S3에 이미지 저장
-        String tempUrl = "123.png";
+        String imageUrl = s3Service.upload(request.multipartFile());
 
         Question question = questionRepository.findById(request.questionId())
                 .orElseThrow(() -> new NotFoundQuestionException(QUESTION_NOT_FOUND));
 
         Story story = Story.createStory(
                 request.occupation(),
-                tempUrl,
+                imageUrl,
                 question,
                 member);
 
