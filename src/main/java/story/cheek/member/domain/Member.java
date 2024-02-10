@@ -9,6 +9,13 @@ import story.cheek.member.dto.MemberBasicInfoUpdateRequest;
 import story.cheek.question.domain.Occupation;
 import story.cheek.report.domain.Report;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import story.cheek.story.domain.Scrap;
+import story.cheek.story.domain.Story;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +42,9 @@ public class Member extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private Status status;
+ 
+    @Column(nullable = false)
+    private boolean isMentor;
 
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -87,5 +97,11 @@ public class Member extends BaseEntity {
         this.reportingList.add(report);
     }
 
+    public boolean canMakeStory() {
+        return isMentor;
+    }
 
+    public boolean isScrapPermission(Scrap scrap) {
+        return id == scrap.getMember().id;
+    }
 }

@@ -78,6 +78,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 .isMentor(false)
                 .status(Status.ACTIVE)
                 .role(Role.ROLE_USER)
+                .isMentor(false)
                 .build();
 
         return memberRepository.save(member);
