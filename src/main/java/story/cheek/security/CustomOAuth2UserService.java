@@ -14,6 +14,7 @@ import story.cheek.common.exception.NotFoundMemberException;
 import story.cheek.member.domain.AuthProvider;
 import story.cheek.member.domain.Member;
 import story.cheek.member.domain.Role;
+import story.cheek.member.domain.Status;
 import story.cheek.member.repository.MemberRepository;
 import story.cheek.security.oauth2.OAuth2AuthenticationProcessingException;
 import story.cheek.security.oauth2.OAuth2UserInfo;
@@ -74,6 +75,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 .image(oAuth2UserInfo.getImageUrl())
                 .provider(AuthProvider.valueOf(provider))
                 .providerId(oAuth2UserInfo.getId())
+                .isMentor(false)
+                .status(Status.ACTIVE)
                 .role(Role.ROLE_USER)
                 .build();
 

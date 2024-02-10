@@ -3,6 +3,7 @@ package story.cheek.member.domain;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
+import story.cheek.application.domain.Application;
 import story.cheek.common.domain.BaseEntity;
 import story.cheek.member.dto.MemberBasicInfoUpdateRequest;
 import story.cheek.question.domain.Occupation;
@@ -33,6 +34,9 @@ public class Member extends BaseEntity {
     private String description;
 
     @Enumerated(EnumType.STRING)
+    private Status status;
+
+    @Enumerated(EnumType.STRING)
     private Role role;
 
     @Enumerated(EnumType.STRING)
@@ -40,8 +44,9 @@ public class Member extends BaseEntity {
 
     private String providerId;
 
-    @Enumerated(EnumType.STRING)
-    private Status status;
+    @OneToOne(mappedBy = "member")
+    @JoinColumn(name = "application_id")
+    private Application application;
 
     @Column(nullable = false)
     private boolean isMentor;
