@@ -2,6 +2,7 @@ package story.cheek.application.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -32,9 +33,9 @@ public class ApplicationController {
         return ResponseEntity.created(URI.create("/api/v1/applications/" + applicationId)).build();
     }
 
-    @PostMapping("/approve") // 어드민
-    public ResponseEntity<Void> approve(@CurrentMember Member member) {
-        // 멘토 신청 승인
+    @PostMapping("/approve/{applicationId}") // 어드민
+    public ResponseEntity<Void> approve(@CurrentMember Member member, @PathVariable Long applicationId) {
+        applicationService.approve(member, applicationId);
         return ResponseEntity.ok().build();
     }
 }

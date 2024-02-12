@@ -12,7 +12,7 @@ import story.cheek.member.domain.Member;
 @NoArgsConstructor
 public class Application extends BaseEntity {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "application_id")
     private Long id;
 

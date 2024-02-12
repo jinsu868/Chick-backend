@@ -18,8 +18,8 @@ public record ApplicationRequest(
         return Application.builder()
                 .member(member)
                 .companyEmail(email)
-                .firstImageUrl(files.getFirst().getOriginalFilename())
-                .secondImageUrl(files.getLast().getOriginalFilename())
+                .firstImageUrl(files.get(0).getOriginalFilename())
+                .secondImageUrl(files.get(1).getOriginalFilename())
                 .build();
     }
 }
