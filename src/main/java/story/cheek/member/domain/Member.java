@@ -5,6 +5,7 @@ import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 import story.cheek.application.domain.Application;
 import story.cheek.common.domain.BaseEntity;
+import story.cheek.follow.domain.Follow;
 import story.cheek.member.dto.MemberBasicInfoUpdateRequest;
 import story.cheek.question.domain.Occupation;
 import story.cheek.report.domain.Report;
@@ -14,7 +15,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import story.cheek.story.domain.Scrap;
-import story.cheek.story.domain.Story;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Member extends BaseEntity {
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
     private Long id;
 
@@ -55,11 +55,13 @@ public class Member extends BaseEntity {
     private String providerId;
 
     @OneToOne(mappedBy = "member")
-    @JoinColumn(name = "application_id")
     private Application application;
 
-    @Column(nullable = false)
-    private boolean isMentor;
+    @OneToMany(mappedBy = "followingMember")
+    private List<Follow> followingList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "followerMember")
+    private List<Follow> followerList = new ArrayList<>();
 
     @OneToMany(mappedBy = "reportingMember")
     private List<Report> reportingList = new ArrayList<>();
@@ -71,8 +73,8 @@ public class Member extends BaseEntity {
         return role.name();
     }
 
-    public void updateImage(MultipartFile file) {
-        this.image = file.getOriginalFilename();
+    public void updateImage(String imageUrl) {
+        this.image = imageUrl;
     }
 
     public void updateBasicInfo(MemberBasicInfoUpdateRequest memberBasicInfoUpdateRequest) {
@@ -87,6 +89,18 @@ public class Member extends BaseEntity {
 
     public void changeStatusToSuspend() {
         this.status = Status.SUSPENDED;
+    }
+
+    public void addFollowingMemberList(Follow follow) {
+        this.followingList.add(follow);
+    }
+
+    public void addFollowerMemberList(Follow follow) {
+        this.followerList.add(follow);
+    }
+
+    public void addFollowerMemberList() {
+
     }
 
     public void addReportedList(Report report) {
