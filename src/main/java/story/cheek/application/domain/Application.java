@@ -42,4 +42,8 @@ public class Application extends BaseEntity {
         this.companyEmail = companyEmail;
         this.isDelete = isDelete;
     }
+
+    public void delete() {
+        isDelete = true;
+    }
 }

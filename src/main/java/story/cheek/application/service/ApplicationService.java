@@ -49,6 +49,7 @@ public class ApplicationService {
 
         String domain = domainExtractor.extract(application.getCompanyEmail());
         companyDomainRepository.save(CompanyDomain.from(domain));
+        application.delete();
         //TODO: push alarm
     }
 
