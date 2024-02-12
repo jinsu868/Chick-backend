@@ -6,9 +6,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import story.cheek.application.domain.Application;
-import story.cheek.application.dto.ApplicationRequest;
+import story.cheek.application.dto.request.ApplicationRequest;
+import story.cheek.application.dto.response.ApplicationResponse;
 import story.cheek.application.repository.ApplicationRepository;
+import story.cheek.common.dto.SliceResponse;
+import story.cheek.common.exception.DuplicateApplyException;
 import story.cheek.common.exception.DuplicateApprovalException;
+import story.cheek.common.exception.ErrorCode;
 import story.cheek.common.exception.NotAdminException;
 import story.cheek.common.exception.NotFoundApplication;
 import story.cheek.common.exception.NotFoundMemberException;
@@ -27,6 +31,7 @@ public class ApplicationService {
     private final DomainExtractor domainExtractor;
 
     public Long apply(Member member, ApplicationRequest request) {
+        validateDuplicateApply(member);
         validateDuplicateApprove(member);
         Application application = request.toEntity(member);
 
@@ -47,21 +52,32 @@ public class ApplicationService {
         //TODO: push alarm
     }
 
+    public SliceResponse<ApplicationResponse> findAll(Member member, String cursor) {
+        validateAdmin(member);
+
+        return applicationRepository.findAllExceptDeleted(cursor);
+    }
+
     private Member findMember(Application application) {
-        Member member = memberRepository.findByApplication(application)
+        return memberRepository.findByApplication(application)
                 .orElseThrow(() -> new NotFoundMemberException(MEMBER_NOT_FOUND));
-        return member;
+
     }
 
     private Application findApplication(Long applicationId) {
-        Application application = applicationRepository.findById(applicationId)
+        return applicationRepository.findById(applicationId)
                 .orElseThrow(() -> new NotFoundApplication(APPLICATION_NOT_FOUND));
-        return application;
     }
 
     private void validateDuplicateApprove(Member member) {
         if (member.isMentor()) {
             throw new DuplicateApprovalException(APPROVAL_DUPLICATION);
+        }
+    }
+
+    private void validateDuplicateApply(Member member) {
+        if (applicationRepository.existsByMember(member)) {
+            throw new DuplicateApplyException(DUPLICATED_APPLICATION);
         }
     }
 

@@ -1,4 +1,4 @@
-package story.cheek.application.dto;
+package story.cheek.application.dto.request;
 
 public record ApplicationRequestOnlyJson(
         String email

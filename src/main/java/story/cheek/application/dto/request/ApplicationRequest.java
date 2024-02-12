@@ -1,4 +1,4 @@
-package story.cheek.application.dto;
+package story.cheek.application.dto.request;
 
 import org.springframework.web.multipart.MultipartFile;
 import story.cheek.application.domain.Application;
@@ -20,6 +20,7 @@ public record ApplicationRequest(
                 .companyEmail(email)
                 .firstImageUrl(files.get(0).getOriginalFilename())
                 .secondImageUrl(files.get(1).getOriginalFilename())
+                .isDelete(false)
                 .build();
     }
 }

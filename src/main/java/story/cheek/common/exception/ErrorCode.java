@@ -22,7 +22,8 @@ public enum ErrorCode {
     INVALID_FILE_EXTENSION(400, "C_010", "유효하지 않은 파일 확장자입니다."),
     NOT_ADMIN(400, "C_011", "Admin 사용자가 아닙니다."),
     APPLICATION_NOT_FOUND(400, "C_012", "Application 을 찾을 수 없습니다"),
-    APPROVAL_DUPLICATION(400, "C_013", "이미 Mentor 승인을 받은 유저입니다.");
+    APPROVAL_DUPLICATION(400, "C_013", "이미 Mentor 승인을 받은 유저입니다."),
+    DUPLICATED_APPLICATION(400, "C_014", "이미 신청서를 제출하셨습니다.");
 
     private final int status;
     private final String code;

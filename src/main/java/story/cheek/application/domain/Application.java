@@ -26,11 +26,20 @@ public class Application extends BaseEntity {
 
     private String companyEmail;
 
+    private boolean isDelete;
+
     @Builder
-    public Application(Member member, String firstImageUrl, String secondImageUrl, String companyEmail) {
+    public Application(
+            Member member,
+            String firstImageUrl,
+            String secondImageUrl,
+            String companyEmail,
+            boolean isDelete) {
+
         this.member = member;
         this.firstImageUrl = firstImageUrl;
         this.secondImageUrl = secondImageUrl;
         this.companyEmail = companyEmail;
+        this.isDelete = isDelete;
     }
 }
