@@ -7,12 +7,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import story.cheek.application.domain.Application;
 import story.cheek.application.dto.request.ApplicationRequest;
+import story.cheek.application.dto.response.ApplicationDetailResponse;
 import story.cheek.application.dto.response.ApplicationResponse;
 import story.cheek.application.repository.ApplicationRepository;
 import story.cheek.common.dto.SliceResponse;
 import story.cheek.common.exception.DuplicateApplyException;
 import story.cheek.common.exception.DuplicateApprovalException;
-import story.cheek.common.exception.ErrorCode;
 import story.cheek.common.exception.NotAdminException;
 import story.cheek.common.exception.NotFoundApplication;
 import story.cheek.common.exception.NotFoundMemberException;
@@ -52,10 +52,18 @@ public class ApplicationService {
         //TODO: push alarm
     }
 
-    public SliceResponse<ApplicationResponse> findAll(Member member, String cursor) {
-        validateAdmin(member);
+    public SliceResponse<ApplicationResponse> findAll(Member adminMember, String cursor) {
+        validateAdmin(adminMember);
 
         return applicationRepository.findAllExceptDeleted(cursor);
+    }
+
+    public ApplicationDetailResponse findDetailById(Member adminMember, Long applicationId) {
+        validateAdmin(adminMember);
+
+        Application application = findApplication(applicationId);
+
+        return ApplicationDetailResponse.from(application);
     }
 
     private Member findMember(Application application) {

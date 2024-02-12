@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import story.cheek.application.dto.request.ApplicationRequest;
 import story.cheek.application.dto.request.ApplicationRequestOnlyJson;
+import story.cheek.application.dto.response.ApplicationDetailResponse;
 import story.cheek.application.dto.response.ApplicationResponse;
 import story.cheek.application.service.ApplicationService;
 import story.cheek.common.dto.SliceResponse;
@@ -34,6 +35,7 @@ public class ApplicationController {
                                             @RequestPart List<MultipartFile> multipartFiles) {
         ApplicationRequest applicationRequest = ApplicationRequest.of(applicationRequestOnlyJson.email(), multipartFiles);
         Long applicationId = applicationService.apply(member, applicationRequest);
+
         return ResponseEntity.created(URI.create("/api/v1/applications/" + applicationId)).build();
     }
 
@@ -42,12 +44,24 @@ public class ApplicationController {
             @CurrentMember Member member,
             @RequestParam(required = false) String cursor) {
         SliceResponse<ApplicationResponse> response = applicationService.findAll(member, cursor);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{applicationId}")
+    public ResponseEntity<ApplicationDetailResponse> findById(
+            @CurrentMember Member member,
+            @PathVariable Long applicationId
+    ) {
+        ApplicationDetailResponse response = applicationService.findDetailById(member, applicationId);
+
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/approve/{applicationId}") // 어드민
     public ResponseEntity<Void> approve(@CurrentMember Member member, @PathVariable Long applicationId) {
         applicationService.approve(member, applicationId);
+
         return ResponseEntity.ok().build();
     }
 }
