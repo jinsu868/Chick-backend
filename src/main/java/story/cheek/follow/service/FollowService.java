@@ -2,6 +2,8 @@ package story.cheek.follow.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import story.cheek.common.constant.SortType;
+import story.cheek.common.dto.SliceResponse;
 import story.cheek.common.exception.ErrorCode;
 import story.cheek.common.exception.NotFoundMemberException;
 import story.cheek.follow.domain.Follow;
@@ -10,9 +12,6 @@ import story.cheek.follow.dto.FollowResponse;
 import story.cheek.follow.repository.FollowRepository;
 import story.cheek.member.domain.Member;
 import story.cheek.member.repository.MemberRepository;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -23,31 +22,21 @@ public class FollowService {
 
     public Long followMember(Long followingId, FollowRequest followRequest) {
         Member followingMember = findMember(followingId);
-        Member followerMember = findMember(followRequest.followerId());
+        Member follower = findMember(followRequest.followerId());
 
-        Follow follow = followRepository.save(followRequest.toEntity(followingMember, followerMember));
+        Follow follow = followRepository.save(followRequest.toEntity(followingMember, follower));
         followingMember.addFollowingMemberList(follow);
-        followerMember.addFollowerMemberList(follow);
+        follower.addFollowerList(follow);
 
         return follow.getId();
     }
 
-    public List<FollowResponse> getFollowingMembers(Long memberId) {
-        Member member = findMember(memberId);
-        List<Follow> followingList = member.getFollowingList();
-        return followingList.stream()
-                .map(Follow::getFollowerMember)
-                .map(FollowResponse::from)
-                .collect(Collectors.toList());
-    }
+    public SliceResponse<FollowResponse> getFollows(Member member, SortType sortType, String cursor) {
+        if (sortType.equals(SortType.FOLLOWING)) {
+            return followRepository.findFollowingMembersByOrderByFollowingSequenceNumberDesc(sortType, member, cursor);
+        }
 
-    public List<FollowResponse> getFollowers(Long memberId) {
-        Member member = findMember(memberId);
-        List<Follow> followingList = member.getFollowerList();
-        return followingList.stream()
-                .map(Follow::getFollowingMember)
-                .map(FollowResponse::from)
-                .collect(Collectors.toList());
+        return followRepository.findFollowersByOrderByFollowerSequenceNumberDesc(sortType, member, cursor);
     }
 
     private Member findMember(Long memberId) {

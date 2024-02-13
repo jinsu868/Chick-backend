@@ -9,8 +9,10 @@ public record FollowRequest(
 ) {
     public Follow toEntity(Member following, Member follower) {
         return Follow.builder()
+                .followingSequenceNumber((long) following.getFollowingList().size() + 1)
+                .followerSequenceNumber((long) follower.getFollowerList().size() + 1)
                 .followingMember(following)
-                .followerMember(follower)
+                .follower(follower)
                 .build();
     }
 }

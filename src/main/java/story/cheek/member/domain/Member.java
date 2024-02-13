@@ -2,18 +2,12 @@ package story.cheek.member.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.web.multipart.MultipartFile;
 import story.cheek.application.domain.Application;
 import story.cheek.common.domain.BaseEntity;
 import story.cheek.follow.domain.Follow;
 import story.cheek.member.dto.MemberBasicInfoUpdateRequest;
 import story.cheek.question.domain.Occupation;
 import story.cheek.report.domain.Report;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import story.cheek.story.domain.Scrap;
 
 import java.util.ArrayList;
@@ -60,7 +54,7 @@ public class Member extends BaseEntity {
     @OneToMany(mappedBy = "followingMember")
     private List<Follow> followingList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "followerMember")
+    @OneToMany(mappedBy = "follower")
     private List<Follow> followerList = new ArrayList<>();
 
     @OneToMany(mappedBy = "reportingMember")
@@ -95,12 +89,8 @@ public class Member extends BaseEntity {
         this.followingList.add(follow);
     }
 
-    public void addFollowerMemberList(Follow follow) {
+    public void addFollowerList(Follow follow) {
         this.followerList.add(follow);
-    }
-
-    public void addFollowerMemberList() {
-
     }
 
     public void addReportedList(Report report) {
@@ -116,6 +106,6 @@ public class Member extends BaseEntity {
     }
 
     public boolean isScrapPermission(Scrap scrap) {
-        return id == scrap.getMember().id;
+        return id.equals(scrap.getMember().id);
     }
 }
