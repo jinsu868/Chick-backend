@@ -58,9 +58,6 @@ public class Member extends BaseEntity {
     @JoinColumn(name = "application_id")
     private Application application;
 
-    @Column(nullable = false)
-    private boolean isMentor;
-
     @OneToMany(mappedBy = "reportingMember")
     private List<Report> reportingList = new ArrayList<>();
 
@@ -102,6 +99,14 @@ public class Member extends BaseEntity {
     }
 
     public boolean isScrapPermission(Scrap scrap) {
-        return id == scrap.getMember().id;
+        return this.equals(scrap.getMember());
+    }
+
+    public boolean isAdmin() {
+        return role == Role.ROLE_ADMIN;
+    }
+
+    public void approveMentor() {
+        isMentor = true;
     }
 }
