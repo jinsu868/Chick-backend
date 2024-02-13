@@ -5,9 +5,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import story.cheek.mail.dto.MailRequest;
+import story.cheek.mail.dto.MailVerificationRequest;
 import story.cheek.mail.service.MailService;
 import story.cheek.member.domain.Member;
 import story.cheek.security.CurrentMember;
@@ -18,11 +18,22 @@ import story.cheek.security.CurrentMember;
 public class MailController {
     private final MailService mailService;
 
-    @PostMapping
-    public ResponseEntity<Void> sendEmail(
+    @PostMapping("verification-requests")
+    public ResponseEntity<Void> sendMail(
             @CurrentMember Member member,
-            @RequestBody MailRequest mailRequest) {
+            @RequestBody MailRequest mailRequest
+    ) {
         mailService.sendEmail(member, mailRequest);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/verifications")
+    public ResponseEntity<Void> verifyMail(
+            @CurrentMember Member member,
+            @RequestBody MailVerificationRequest mailVerificationRequest
+    ) {
+        mailService.verify(member, mailVerificationRequest);
 
         return ResponseEntity.ok().build();
     }

@@ -26,7 +26,9 @@ public enum ErrorCode {
     DUPLICATED_APPLICATION(400, "C_014", "이미 신청서를 제출하셨습니다."),
     FAILED_GENERATE_CODE(500, "S_001", "인증 코드 생성에 실패했습니다."),
     FAILED_SEND_MAIL(500, "S_002", "메일 전송에 실패했습니다."),
-    COMPANY_DOMAIN_NOT_FOUND(400, "C_015", "회사 도메인을 찾을 수 없습니다.");
+    COMPANY_DOMAIN_NOT_FOUND(400, "C_015", "회사 도메인을 찾을 수 없습니다."),
+    MAIL_CODE_NOT_MATCH(400, "C_016", "메일 인증 코드가 일치하지 않습니다."),
+    MAIL_REQUEST_NOT_FOUND(400, "C_017", "인증 코드를 먼저 발급해주세요.");
 
     private final int status;
     private final String code;
