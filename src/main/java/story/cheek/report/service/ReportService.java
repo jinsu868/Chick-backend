@@ -13,8 +13,6 @@ import story.cheek.report.domain.Report;
 import story.cheek.report.dto.ReportRequest;
 import story.cheek.report.repository.ReportRepository;
 
-import java.util.List;
-
 @Slf4j
 @Service
 @RequiredArgsConstructor
