@@ -23,7 +23,10 @@ public enum ErrorCode {
     NOT_ADMIN(400, "C_011", "Admin 사용자가 아닙니다."),
     APPLICATION_NOT_FOUND(400, "C_012", "Application 을 찾을 수 없습니다"),
     APPROVAL_DUPLICATION(400, "C_013", "이미 Mentor 승인을 받은 유저입니다."),
-    DUPLICATED_APPLICATION(400, "C_014", "이미 신청서를 제출하셨습니다.");
+    DUPLICATED_APPLICATION(400, "C_014", "이미 신청서를 제출하셨습니다."),
+    FAILED_GENERATE_CODE(500, "S_001", "인증 코드 생성에 실패했습니다."),
+    FAILED_SEND_MAIL(500, "S_002", "메일 전송에 실패했습니다."),
+    COMPANY_DOMAIN_NOT_FOUND(400, "C_015", "회사 도메인을 찾을 수 없습니다.");
 
     private final int status;
     private final String code;
