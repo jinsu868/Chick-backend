@@ -99,7 +99,7 @@ public class Member extends BaseEntity {
     }
 
     public boolean isScrapPermission(Scrap scrap) {
-        return id == scrap.getMember().id;
+        return this.equals(scrap.getMember());
     }
 
     public boolean isAdmin() {
