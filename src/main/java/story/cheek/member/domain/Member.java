@@ -8,7 +8,6 @@ import story.cheek.follow.domain.Follow;
 import story.cheek.member.dto.MemberBasicInfoUpdateRequest;
 import story.cheek.question.domain.Occupation;
 import story.cheek.report.domain.Report;
-import story.cheek.story.domain.Scrap;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -105,7 +104,7 @@ public class Member extends BaseEntity {
         return isMentor;
     }
 
-    public boolean isScrapPermission(Scrap scrap) {
-        return id.equals(scrap.getMember().id);
+    public boolean hasAuthority(Long memberId) {
+        return this.id.equals(memberId);
     }
 }

@@ -24,7 +24,7 @@ public class MemberController {
     @PutMapping("/image")
     public ResponseEntity<Void> updateMemberImage(@CurrentMember Member member,
                                                   @RequestParam MultipartFile file) {
-        memberService.updateMemberImage(member, file); // S3 연결 후 수정 예정
+        memberService.updateMemberImage(member, file);
         return ResponseEntity.ok().build();
     }
 

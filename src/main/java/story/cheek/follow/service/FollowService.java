@@ -4,8 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import story.cheek.common.constant.SortType;
 import story.cheek.common.dto.SliceResponse;
-import story.cheek.common.exception.ErrorCode;
-import story.cheek.common.exception.NotFoundMemberException;
+import story.cheek.common.exception.*;
 import story.cheek.follow.domain.Follow;
 import story.cheek.follow.dto.FollowRequest;
 import story.cheek.follow.dto.FollowResponse;
@@ -24,6 +23,10 @@ public class FollowService {
         Member followingMember = findMember(followingId);
         Member follower = findMember(followRequest.followerId());
 
+        if (followRepository.findByFollowingMemberIdAndAndFollowerId(followingId, followRequest.followerId()).isPresent()) {
+            throw new DuplicateFollowException(ErrorCode.DUPLICATED_FOLLOW);
+        }
+
         Follow follow = followRepository.save(followRequest.toEntity(followingMember, follower));
         followingMember.addFollowingMemberList(follow);
         follower.addFollowerList(follow);
@@ -37,6 +40,17 @@ public class FollowService {
         }
 
         return followRepository.findFollowersByOrderByFollowerSequenceNumberDesc(sortType, member, cursor);
+    }
+
+    public void deleteFollow(Member member, Long followId) {
+        Follow follow = followRepository.findById(followId)
+                .orElseThrow(() -> new NotFoundFollowException(ErrorCode.FOLLOW_NOT_FOUND));
+
+        if (!member.hasAuthority(follow.getFollowingMember().getId())) {
+            throw new ForbiddenFollowException(ErrorCode.FORBIDDEN_FOLLOW_DELETE);
+        }
+
+        followRepository.deleteById(followId);
     }
 
     private Member findMember(Long memberId) {

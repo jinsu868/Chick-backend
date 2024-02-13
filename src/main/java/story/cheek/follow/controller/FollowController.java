@@ -20,7 +20,7 @@ public class FollowController {
 
     private final FollowService followService;
 
-    @PostMapping("/request")
+    @PostMapping
     public ResponseEntity<Void> followRequest(@CurrentMember Member member,
                                               @RequestBody FollowRequest followRequest) {
         Long followId = followService.followMember(member.getId(), followRequest);
@@ -29,8 +29,15 @@ public class FollowController {
 
     @GetMapping
     public ResponseEntity<SliceResponse<FollowResponse>> getFollows(@CurrentMember Member member,
-                                                                             SortType sortType,
-                                                                             @RequestParam(required = false) String cursor) {
+                                                                    SortType sortType,
+                                                                    @RequestParam(required = false) String cursor) {
         return ResponseEntity.ok().body(followService.getFollows(member, sortType, cursor));
+    }
+
+    @DeleteMapping("/{followId}")
+    public ResponseEntity<Void> cancelFollow(@CurrentMember Member member,
+                                             @PathVariable Long followId) {
+        followService.deleteFollow(member, followId);
+        return ResponseEntity.noContent().build();
     }
 }
