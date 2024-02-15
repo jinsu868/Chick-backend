@@ -23,7 +23,7 @@ public class FollowController {
     @PostMapping
     public ResponseEntity<Void> followRequest(@CurrentMember Member member,
                                               @RequestBody FollowRequest followRequest) {
-        Long followId = followService.followMember(member.getId(), followRequest);
+        Long followId = followService.followMember(member, followRequest);
         return ResponseEntity.created(URI.create("/api/v1/follow/" + followId)).build();
     }
 

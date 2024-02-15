@@ -19,11 +19,10 @@ public class FollowService {
     private final MemberRepository memberRepository;
     private final FollowRepository followRepository;
 
-    public Long followMember(Long followingId, FollowRequest followRequest) {
-        Member followingMember = findMember(followingId);
+    public Long followMember(Member followingMember, FollowRequest followRequest) {
         Member follower = findMember(followRequest.followerId());
 
-        if (followRepository.findByFollowingMemberIdAndAndFollowerId(followingId, followRequest.followerId()).isPresent()) {
+        if (followRepository.existsFollowByFollowingMemberAndFollower(followingMember, follower)) {
             throw new DuplicateFollowException(ErrorCode.DUPLICATED_FOLLOW);
         }
 
@@ -46,7 +45,7 @@ public class FollowService {
         Follow follow = followRepository.findById(followId)
                 .orElseThrow(() -> new NotFoundFollowException(ErrorCode.FOLLOW_NOT_FOUND));
 
-        if (!member.hasAuthority(follow.getFollowingMember().getId())) {
+        if (member.hasAuthority(follow.getFollowingMember().getId())) {
             throw new ForbiddenFollowException(ErrorCode.FORBIDDEN_FOLLOW_DELETE);
         }
 

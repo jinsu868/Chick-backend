@@ -20,8 +20,9 @@ public class MemberService {
     @Transactional
     public void updateMemberImage(Member uploadedMember, MultipartFile file) {
         Member member = findMember(uploadedMember.getId());
-        String imageUrl = s3Service.upload(file);
-        member.updateImage(imageUrl);
+        String updateImageUrl = s3Service.upload(file);
+        s3Service.deleteFile(uploadedMember.getImage());
+        member.updateImage(updateImageUrl);
     }
 
     @Transactional

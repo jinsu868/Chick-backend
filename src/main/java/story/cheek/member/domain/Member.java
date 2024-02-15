@@ -18,7 +18,8 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Member extends BaseEntity {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
     private Long id;
 
@@ -35,7 +36,7 @@ public class Member extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private Status status;
- 
+
     @Column(nullable = false)
     private boolean isMentor;
 
@@ -105,6 +106,6 @@ public class Member extends BaseEntity {
     }
 
     public boolean hasAuthority(Long memberId) {
-        return this.id.equals(memberId);
+        return !this.id.equals(memberId);
     }
 }
