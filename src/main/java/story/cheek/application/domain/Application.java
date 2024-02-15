@@ -12,7 +12,7 @@ import story.cheek.member.domain.Member;
 @NoArgsConstructor
 public class Application extends BaseEntity {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "application_id")
     private Long id;
 
@@ -26,11 +26,24 @@ public class Application extends BaseEntity {
 
     private String companyEmail;
 
+    private boolean isDelete;
+
     @Builder
-    public Application(Member member, String firstImageUrl, String secondImageUrl, String companyEmail) {
+    public Application(
+            Member member,
+            String firstImageUrl,
+            String secondImageUrl,
+            String companyEmail,
+            boolean isDelete) {
+
         this.member = member;
         this.firstImageUrl = firstImageUrl;
         this.secondImageUrl = secondImageUrl;
         this.companyEmail = companyEmail;
+        this.isDelete = isDelete;
+    }
+
+    public void delete() {
+        isDelete = true;
     }
 }
