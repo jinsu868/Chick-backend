@@ -3,9 +3,11 @@
 /.gradle
 /build
 /.idea
-
+/src/main/resources/static
+logstash.conf
+index_setting.sh
 ### YML ###
-*.yml
+#*.yml
 application.yml
 
 HELP.md
