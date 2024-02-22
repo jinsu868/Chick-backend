@@ -10,16 +10,19 @@ import story.cheek.question.domain.Occupation;
 import story.cheek.search.EsIndex;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@NoArgsConstructor
 @Document(indexName = EsIndex.QUESTION_INDEX)
 public class SearchQuestion {
     @Id
     @Field(name = "question_id", type = FieldType.Long)
     private Long questionId;
 
+    @Field(name = "member_id", type = FieldType.Long)
+    private Long memberId;
+
     @Field(name = "occupation", type = FieldType.Text)
-    private Occupation occupation;
+    private String occupation;
 
     @Field(name = "title", type = FieldType.Text)
     private String title;

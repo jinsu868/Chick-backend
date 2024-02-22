@@ -5,11 +5,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import story.cheek.search.repository.MemberSearchRepository;
 import story.cheek.search.repository.QuestionSearchRepository;
 
 @EnableJpaRepositories(excludeFilters = @ComponentScan.Filter(
         type = FilterType.ASSIGNABLE_TYPE,
-        classes = QuestionSearchRepository.class))
+        classes = {QuestionSearchRepository.class, MemberSearchRepository.class}))
 @SpringBootApplication
 public class CheekApplication {
 
