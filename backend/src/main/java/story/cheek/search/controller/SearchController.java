@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import story.cheek.common.dto.SliceResponse;
-import story.cheek.question.domain.Occupation;
 import story.cheek.search.dto.MemberSearchResponse;
 import story.cheek.search.dto.QuestionSearchResponse;
 import story.cheek.search.service.MemberSearchService;
@@ -20,9 +19,9 @@ public class SearchController {
     private final MemberSearchService memberSearchService;
 
     @GetMapping("questions")
-    public SliceResponse<QuestionSearchResponse> searchQuestions(@RequestParam("title") String title,
+    public SliceResponse<QuestionSearchResponse> searchQuestions(@RequestParam("search") String search,
                                                                  @RequestParam("occupation") String occupation) {
-        return questionSearchService.searchQuestion(title, title, occupation);
+        return questionSearchService.searchQuestion(search, occupation);
     }
 
     @GetMapping("members")

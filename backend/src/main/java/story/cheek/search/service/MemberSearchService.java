@@ -20,6 +20,5 @@ public class MemberSearchService {
                 .map(MemberSearchResponse::from)
                 .toList();
         return SliceResponse.of(memberSearchResponses, true, "1");
-
     }
 }

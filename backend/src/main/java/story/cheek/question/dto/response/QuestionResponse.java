@@ -13,8 +13,13 @@ public record QuestionResponse(
         return new QuestionResponse(
                 question.getId(),
                 question.getTitle(),
-                question.getContent(),
+                splitTitleAndContent(question),
                 question.getWriter().getName()
         );
+    }
+
+    // title 분리 메서드 입니다
+    private static String splitTitleAndContent(Question question) {
+        return question.getContent().substring(question.getTitle().length() + 1);
     }
 }

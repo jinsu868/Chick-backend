@@ -14,19 +14,18 @@ import story.cheek.search.repository.QuestionSearchRepository;
 
 import java.util.List;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class QuestionSearchService {
     private final QuestionSearchRepository questionSearchRepository;
     private final MemberRepository memberRepository;
 
-    public SliceResponse<QuestionSearchResponse> searchQuestion(String title, String content, String occupation) {
-        List<SearchQuestion> resultList = questionSearchRepository.findSearchQuestionsByTitleContainsOrContentContainsAndOccupationIgnoreCaseOrderByQuestionIdDesc(title, content, occupation);
+    public SliceResponse<QuestionSearchResponse> searchQuestion(String search, String occupation) {
+        List<SearchQuestion> resultList = questionSearchRepository.findSearchQuestionsByContentContainsAndOccupation(search, occupation);
         List<QuestionSearchResponse> responses = resultList
                 .stream()
                 .map((SearchQuestion searchQuestion) ->
-                        QuestionSearchResponse.from(searchQuestion, getMemberName(searchQuestion.getMemberId()))).toList();
+                        QuestionSearchResponse.from(searchQuestion, getMemberName(searchQuestion.getWriterId()))).toList();
 
         return SliceResponse.of(responses, true, "1");
     }

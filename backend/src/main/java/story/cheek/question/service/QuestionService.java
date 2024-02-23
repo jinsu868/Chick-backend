@@ -29,13 +29,19 @@ public class QuestionService {
         Question question = Question.createQuestion(
                 request.occupation(),
                 request.title(),
-                request.content(),
+                concatenateTitleAndContent(request),
                 member
         );
 
         questionRepository.save(question);
 
         return question.getId();
+    }
+
+    // es로 제목 + 내용 + 직종 세가지로 조회 시 쿼리 문제가 있어서
+    // 제목 + 내용을 더해서 하나로 만들어 제목에 있는 단어까지 내용으로 바로 조회하기 위해서 만들었습니다.
+    private String concatenateTitleAndContent(QuestionCreateRequest request) {
+        return request.title() + " " + request.content();
     }
 
     public QuestionDetailResponse findDetailById(Long questionId) {

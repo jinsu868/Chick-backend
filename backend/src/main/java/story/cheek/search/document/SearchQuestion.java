@@ -6,20 +6,19 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.*;
-import story.cheek.question.domain.Occupation;
 import story.cheek.search.EsIndex;
 
 @Getter
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Document(indexName = EsIndex.QUESTION_INDEX)
 public class SearchQuestion {
     @Id
     @Field(name = "question_id", type = FieldType.Long)
     private Long questionId;
 
-    @Field(name = "member_id", type = FieldType.Long)
-    private Long memberId;
+    @Field(name = "writer_id", type = FieldType.Long)
+    private Long writerId;
 
     @Field(name = "occupation", type = FieldType.Text)
     private String occupation;

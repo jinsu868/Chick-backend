@@ -1,6 +1,5 @@
 package story.cheek.search.dto;
 
-import story.cheek.question.domain.Occupation;
 import story.cheek.search.document.SearchQuestion;
 
 public record QuestionSearchResponse(
@@ -15,8 +14,12 @@ public record QuestionSearchResponse(
                 searchQuestion.getQuestionId(),
                 searchQuestion.getOccupation(),
                 searchQuestion.getTitle(),
-                searchQuestion.getContent(),
+                splitTitleAndContent(searchQuestion),
                 writer
         );
+    }
+
+    private static String splitTitleAndContent(SearchQuestion searchQuestion) {
+        return searchQuestion.getContent().substring(searchQuestion.getTitle().length() + 1);
     }
 }

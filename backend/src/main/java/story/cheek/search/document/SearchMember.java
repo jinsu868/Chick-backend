@@ -1,5 +1,6 @@
 package story.cheek.search.document;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +13,7 @@ import story.cheek.search.EsIndex;
 
 @Getter
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Document(indexName = EsIndex.MEMBER_INDEX)
 public class SearchMember {
     @Id
