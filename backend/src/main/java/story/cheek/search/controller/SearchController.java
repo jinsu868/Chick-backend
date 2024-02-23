@@ -20,8 +20,9 @@ public class SearchController {
 
     @GetMapping("questions")
     public SliceResponse<QuestionSearchResponse> searchQuestions(@RequestParam("search") String search,
-                                                                 @RequestParam("occupation") String occupation) {
-        return questionSearchService.searchQuestion(search, occupation);
+                                                                 @RequestParam("occupation") String occupation,
+                                                                 @RequestParam("cursor") String cursor) {
+        return questionSearchService.searchQuestion(search, occupation, cursor);
     }
 
     @GetMapping("members")

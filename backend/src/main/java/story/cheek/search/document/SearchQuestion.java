@@ -28,4 +28,7 @@ public class SearchQuestion {
 
     @Field(name = "content", type = FieldType.Text)
     private String content;
+
+    @Field(name = "created_at", type = FieldType.Date, format = DateFormat.date_time_no_millis)
+    private String createdAt;
 }

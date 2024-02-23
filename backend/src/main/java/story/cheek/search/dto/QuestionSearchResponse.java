@@ -7,7 +7,8 @@ public record QuestionSearchResponse(
         String occupation,
         String title,
         String content,
-        String writer
+        String writer,
+        String createdAt
 ) {
     public static QuestionSearchResponse from(SearchQuestion searchQuestion, String writer) {
         return new QuestionSearchResponse(
@@ -15,7 +16,8 @@ public record QuestionSearchResponse(
                 searchQuestion.getOccupation(),
                 searchQuestion.getTitle(),
                 splitTitleAndContent(searchQuestion),
-                writer
+                writer,
+                searchQuestion.getCreatedAt()
         );
     }
 
