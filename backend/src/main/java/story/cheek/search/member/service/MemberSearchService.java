@@ -1,11 +1,13 @@
-package story.cheek.search.service;
+package story.cheek.search.member.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import story.cheek.common.dto.SliceResponse;
-import story.cheek.search.document.SearchMember;
-import story.cheek.search.dto.MemberSearchResponse;
-import story.cheek.search.repository.MemberSearchRepository;
+import story.cheek.follow.repository.FollowRepository;
+import story.cheek.member.repository.MemberRepository;
+import story.cheek.search.member.document.SearchMember;
+import story.cheek.search.member.dto.MemberSearchResponse;
+import story.cheek.search.member.repository.MemberSearchRepository;
 
 import java.util.List;
 
@@ -13,9 +15,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MemberSearchService {
     private final MemberSearchRepository memberSearchRepository;
+    private final MemberRepository memberRepository;
+    private final FollowRepository followRepository;
 
-    public SliceResponse<MemberSearchResponse> searchMembersByTitle(String name) {
+    public SliceResponse<MemberSearchResponse> searchMembersByName(String name) {
         List<SearchMember> searchMembersByName = memberSearchRepository.findSearchMembersByNameContains(name);
+//        searchMembersByName.stream()
+//                .map()
+
         List<MemberSearchResponse> memberSearchResponses = searchMembersByName.stream()
                 .map(MemberSearchResponse::from)
                 .toList();

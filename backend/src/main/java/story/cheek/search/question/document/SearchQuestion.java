@@ -1,4 +1,4 @@
-package story.cheek.search.document;
+package story.cheek.search.question.document;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

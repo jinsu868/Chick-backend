@@ -1,6 +1,6 @@
-package story.cheek.search.dto;
+package story.cheek.search.question.dto;
 
-import story.cheek.search.document.SearchQuestion;
+import story.cheek.search.question.document.SearchQuestion;
 
 public record QuestionSearchResponse(
         Long questionId,

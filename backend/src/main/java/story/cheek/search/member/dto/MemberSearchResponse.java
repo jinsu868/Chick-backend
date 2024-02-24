@@ -1,7 +1,7 @@
-package story.cheek.search.dto;
+package story.cheek.search.member.dto;
 
 import story.cheek.question.domain.Occupation;
-import story.cheek.search.document.SearchMember;
+import story.cheek.search.member.document.SearchMember;
 
 public record MemberSearchResponse(
         Long memberId,

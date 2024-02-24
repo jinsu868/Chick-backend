@@ -1,4 +1,4 @@
-package story.cheek.search.repository;
+package story.cheek.search.question.repository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,8 +17,8 @@ import story.cheek.common.exception.NotFoundFollowException;
 import story.cheek.common.exception.NotFoundMemberException;
 import story.cheek.member.domain.Member;
 import story.cheek.member.repository.MemberRepository;
-import story.cheek.search.document.SearchQuestion;
-import story.cheek.search.dto.QuestionSearchResponse;
+import story.cheek.search.question.document.SearchQuestion;
+import story.cheek.search.question.dto.QuestionSearchResponse;
 
 import java.util.List;
 import java.util.stream.Collectors;

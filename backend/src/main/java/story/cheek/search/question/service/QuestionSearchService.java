@@ -1,10 +1,10 @@
-package story.cheek.search.service;
+package story.cheek.search.question.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import story.cheek.common.dto.SliceResponse;
-import story.cheek.search.dto.QuestionSearchResponse;
-import story.cheek.search.repository.QuestionSearchRepository;
+import story.cheek.search.question.dto.QuestionSearchResponse;
+import story.cheek.search.question.repository.QuestionSearchRepository;
 
 @Service
 @RequiredArgsConstructor
