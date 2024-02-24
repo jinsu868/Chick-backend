@@ -23,9 +23,7 @@ public class FollowService {
         Member followRequestdMember = findMember(followingMember.getId());
         Member follower = findMember(followRequest.followerId());
 
-        if (followRepository.existsFollowByFollowingMemberAndFollower(followRequestdMember, follower)) {
-            throw new DuplicateFollowException(ErrorCode.DUPLICATED_FOLLOW);
-        }
+        validateFollow(followRequestdMember, follower);
 
         Follow follow = followRepository.save(followRequest.toEntity(followRequestdMember, follower));
         followRequestdMember.addFollowingMemberList(follow);
@@ -51,6 +49,16 @@ public class FollowService {
         }
 
         followRepository.deleteById(followId);
+    }
+
+    private void validateFollow(Member followRequestdMember, Member follower) {
+        if (followRepository.existsFollowByFollowingMemberAndFollower(followRequestdMember, follower)) {
+            throw new DuplicateFollowException(ErrorCode.DUPLICATED_FOLLOW);
+        }
+
+        if (followRequestdMember.getId().equals(follower.getId())) {
+            throw new SelfFollowException(ErrorCode.SELF_FOLLOW);
+        }
     }
 
     private Member findMember(Long memberId) {
