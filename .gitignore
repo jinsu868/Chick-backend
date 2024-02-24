@@ -1,2 +1,5 @@
 index_setting.sh
 devops/elk/logstash/.env
+
+/.idea
+/.gradle
