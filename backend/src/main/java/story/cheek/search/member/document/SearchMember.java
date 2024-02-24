@@ -31,4 +31,7 @@ public class SearchMember {
 
     @Field(name = "description", type = FieldType.Text)
     private String description;
+
+    @Field(name = "follower_count", type = FieldType.Integer)
+    private int followerCount;
 }

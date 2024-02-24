@@ -15,38 +15,39 @@ import story.cheek.common.dto.SliceResponse;
 import story.cheek.common.exception.ErrorCode;
 import story.cheek.common.exception.NotFoundFollowException;
 import story.cheek.common.exception.NotFoundMemberException;
+import story.cheek.common.exception.NotFoundQuestionException;
 import story.cheek.member.domain.Member;
 import story.cheek.member.repository.MemberRepository;
 import story.cheek.search.question.document.SearchQuestion;
-import story.cheek.search.question.dto.QuestionSearchResponse;
+import story.cheek.search.question.dto.SearchQuestionResponse;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
-public class QuestionSearchRepositoryImpl implements QuestionSearchRepositoryCustom {
+public class SearchQuestionRepositoryImpl implements SearchQuestionRepositoryCustom {
     private static final int PAGE_SIZE = 10;
 
     private final ElasticsearchOperations elasticsearchOperations;
     private final MemberRepository memberRepository;
 
     @Override
-    public SliceResponse<QuestionSearchResponse> getQuestions(String search, String occupation, String cursor) {
-        NativeSearchQuery query = createQueryWithIdDescendingOrder(search, occupation, cursor);
+    public SliceResponse<SearchQuestionResponse> getQuestions(String search, String occupation, String cursor) {
+        NativeSearchQuery query = createQueryWithCursorDescending(search, occupation, cursor);
 
         SearchHits<SearchQuestion> results = elasticsearchOperations.search(query, SearchQuestion.class);
 
-        List<QuestionSearchResponse> responses = results
+        List<SearchQuestionResponse> responses = results
                 .stream()
-                .map((SearchHit<SearchQuestion> searchHit) -> QuestionSearchResponse
+                .map((SearchHit<SearchQuestion> searchHit) -> SearchQuestionResponse
                         .from(searchHit.getContent(), getMemberName(searchHit.getContent().getWriterId())))
                 .collect(Collectors.toList());
 
         return convertToSlice(responses);
     }
 
-    public NativeSearchQuery createQueryWithIdDescendingOrder(String search, String occupation, String cursor) {
+    public NativeSearchQuery createQueryWithCursorDescending(String search, String occupation, String cursor) {
         NativeSearchQueryBuilder queryBuilder = new NativeSearchQueryBuilder();
 
         QueryBuilder query = QueryBuilders.boolQuery()
@@ -59,20 +60,20 @@ public class QuestionSearchRepositoryImpl implements QuestionSearchRepositoryCus
         return queryBuilder.build();
     }
 
-    private SliceResponse<QuestionSearchResponse> convertToSlice(List<QuestionSearchResponse> searchQuestions) {
+    private SliceResponse<SearchQuestionResponse> convertToSlice(List<SearchQuestionResponse> searchQuestions) {
         validateSearchQuestionExist(searchQuestions);
         boolean hasNext = existNextPage(searchQuestions);
         String nextCursor = generateCursor(searchQuestions);
         return SliceResponse.of(searchQuestions, hasNext, nextCursor);
     }
 
-    private void validateSearchQuestionExist(List<QuestionSearchResponse> questionSearchResponses) {
-        if (questionSearchResponses.isEmpty()) {
-            throw new NotFoundFollowException(ErrorCode.FOLLOWING_NOT_FOUND);
+    private void validateSearchQuestionExist(List<SearchQuestionResponse> searchQuestionResponses) {
+        if (searchQuestionResponses.isEmpty()) {
+            throw new NotFoundQuestionException(ErrorCode.QUESTION_NOT_FOUND);
         }
     }
 
-    private boolean existNextPage(List<QuestionSearchResponse> searchQuestions) {
+    private boolean existNextPage(List<SearchQuestionResponse> searchQuestions) {
         if (searchQuestions.size() > PAGE_SIZE) {
             searchQuestions.remove(PAGE_SIZE);
             return true;
@@ -81,8 +82,8 @@ public class QuestionSearchRepositoryImpl implements QuestionSearchRepositoryCus
         return false;
     }
 
-    private String generateCursor(List<QuestionSearchResponse> searchQuestions) {
-        QuestionSearchResponse searchResponse = searchQuestions.get(searchQuestions.size() - 1);
+    private String generateCursor(List<SearchQuestionResponse> searchQuestions) {
+        SearchQuestionResponse searchResponse = searchQuestions.get(searchQuestions.size() - 1);
 
         return String.valueOf(searchResponse.createdAt());
     }

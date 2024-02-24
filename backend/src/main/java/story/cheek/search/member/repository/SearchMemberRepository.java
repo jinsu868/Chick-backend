@@ -5,6 +5,6 @@ import story.cheek.search.member.document.SearchMember;
 
 import java.util.List;
 
-public interface MemberSearchRepository extends ElasticsearchRepository<SearchMember, Long> , MemberSearchRepositoryCustom{
+public interface SearchMemberRepository extends ElasticsearchRepository<SearchMember, Long> , SearchMemberRepositoryCustom {
     List<SearchMember> findSearchMembersByNameContains(String name);
 }

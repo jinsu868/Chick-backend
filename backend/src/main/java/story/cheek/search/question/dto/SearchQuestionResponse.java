@@ -2,7 +2,7 @@ package story.cheek.search.question.dto;
 
 import story.cheek.search.question.document.SearchQuestion;
 
-public record QuestionSearchResponse(
+public record SearchQuestionResponse(
         Long questionId,
         String occupation,
         String title,
@@ -10,8 +10,8 @@ public record QuestionSearchResponse(
         String writer,
         String createdAt
 ) {
-    public static QuestionSearchResponse from(SearchQuestion searchQuestion, String writer) {
-        return new QuestionSearchResponse(
+    public static SearchQuestionResponse from(SearchQuestion searchQuestion, String writer) {
+        return new SearchQuestionResponse(
                 searchQuestion.getQuestionId(),
                 searchQuestion.getOccupation(),
                 searchQuestion.getTitle(),
