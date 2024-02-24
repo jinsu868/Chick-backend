@@ -20,14 +20,15 @@ public class FollowService {
     private final FollowRepository followRepository;
 
     public Long followMember(Member followingMember, FollowRequest followRequest) {
+        Member followRequestdMember = findMember(followingMember.getId());
         Member follower = findMember(followRequest.followerId());
 
-        if (followRepository.existsFollowByFollowingMemberAndFollower(followingMember, follower)) {
+        if (followRepository.existsFollowByFollowingMemberAndFollower(followRequestdMember, follower)) {
             throw new DuplicateFollowException(ErrorCode.DUPLICATED_FOLLOW);
         }
 
-        Follow follow = followRepository.save(followRequest.toEntity(followingMember, follower));
-        followingMember.addFollowingMemberList(follow);
+        Follow follow = followRepository.save(followRequest.toEntity(followRequestdMember, follower));
+        followRequestdMember.addFollowingMemberList(follow);
         follower.addFollowerList(follow);
 
         return follow.getId();

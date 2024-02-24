@@ -15,6 +15,7 @@ import story.cheek.common.dto.SliceResponse;
 import story.cheek.common.exception.ErrorCode;
 import story.cheek.common.exception.NotFoundFollowException;
 import story.cheek.common.exception.NotFoundMemberException;
+import story.cheek.common.exception.NotFoundQuestionException;
 import story.cheek.member.domain.Member;
 import story.cheek.member.repository.MemberRepository;
 import story.cheek.search.question.document.SearchQuestion;
@@ -33,7 +34,7 @@ public class SearchQuestionRepositoryImpl implements SearchQuestionRepositoryCus
 
     @Override
     public SliceResponse<SearchQuestionResponse> getQuestions(String search, String occupation, String cursor) {
-        NativeSearchQuery query = createQueryWithIdDescendingOrder(search, occupation, cursor);
+        NativeSearchQuery query = createQueryWithCursorDescending(search, occupation, cursor);
 
         SearchHits<SearchQuestion> results = elasticsearchOperations.search(query, SearchQuestion.class);
 
@@ -46,7 +47,7 @@ public class SearchQuestionRepositoryImpl implements SearchQuestionRepositoryCus
         return convertToSlice(responses);
     }
 
-    public NativeSearchQuery createQueryWithIdDescendingOrder(String search, String occupation, String cursor) {
+    public NativeSearchQuery createQueryWithCursorDescending(String search, String occupation, String cursor) {
         NativeSearchQueryBuilder queryBuilder = new NativeSearchQueryBuilder();
 
         QueryBuilder query = QueryBuilders.boolQuery()
@@ -68,7 +69,7 @@ public class SearchQuestionRepositoryImpl implements SearchQuestionRepositoryCus
 
     private void validateSearchQuestionExist(List<SearchQuestionResponse> searchQuestionResponses) {
         if (searchQuestionResponses.isEmpty()) {
-            throw new NotFoundFollowException(ErrorCode.FOLLOWING_NOT_FOUND);
+            throw new NotFoundQuestionException(ErrorCode.QUESTION_NOT_FOUND);
         }
     }
 

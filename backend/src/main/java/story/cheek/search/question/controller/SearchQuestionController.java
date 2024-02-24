@@ -15,7 +15,7 @@ import story.cheek.search.question.service.SearchQuestionService;
 public class SearchQuestionController {
     private final SearchQuestionService searchQuestionService;
 
-    @GetMapping("questions")
+    @GetMapping
     public SliceResponse<SearchQuestionResponse> searchQuestions(@RequestParam("search") String search,
                                                                  @RequestParam("occupation") String occupation,
                                                                  @RequestParam("cursor") String cursor) {

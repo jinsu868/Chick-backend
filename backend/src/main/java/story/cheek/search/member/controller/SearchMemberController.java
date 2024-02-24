@@ -15,8 +15,9 @@ import story.cheek.search.member.service.SearchMemberService;
 public class SearchMemberController {
     private final SearchMemberService searchMemberService;
 
-    @GetMapping("members")
-    public SliceResponse<SearchMemberResponse> searchMembers(@RequestParam("name") String name) {
-        return searchMemberService.searchMembersByName(name);
+    @GetMapping
+    public SliceResponse<SearchMemberResponse> searchMembers(@RequestParam("name") String name,
+                                                             @RequestParam("cursor") String cursor) {
+        return searchMemberService.searchMembersByName(name, cursor);
     }
 }
