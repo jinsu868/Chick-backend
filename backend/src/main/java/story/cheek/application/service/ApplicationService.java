@@ -3,6 +3,7 @@ package story.cheek.application.service;
 import static story.cheek.common.exception.ErrorCode.*;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import story.cheek.application.domain.Application;
@@ -11,6 +12,7 @@ import story.cheek.application.dto.response.ApplicationDetailResponse;
 import story.cheek.application.dto.response.ApplicationResponse;
 import story.cheek.application.repository.ApplicationRepository;
 import story.cheek.common.dto.SliceResponse;
+import story.cheek.common.event.MentorApproveEvent;
 import story.cheek.common.exception.DuplicateApplyException;
 import story.cheek.common.exception.DuplicateApprovalException;
 import story.cheek.common.exception.NotAdminException;
@@ -29,6 +31,7 @@ public class ApplicationService {
     private final MemberRepository memberRepository;
     private final CompanyDomainRepository companyDomainRepository;
     private final DomainExtractor domainExtractor;
+    private final ApplicationEventPublisher eventPublisher;
 
     public Long apply(Member member, ApplicationRequest request) {
         validateDuplicateApply(member);
@@ -50,7 +53,8 @@ public class ApplicationService {
         String domain = domainExtractor.extract(application.getCompanyEmail());
         companyDomainRepository.save(CompanyDomain.from(domain));
         application.delete();
-        //TODO: push alarm
+
+        eventPublisher.publishEvent(new MentorApproveEvent(member.getId(), member.getName()));
     }
 
     public SliceResponse<ApplicationResponse> findAll(Member adminMember, String cursor) {
