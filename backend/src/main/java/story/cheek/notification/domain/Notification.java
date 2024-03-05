@@ -28,6 +28,9 @@ public class Notification extends BaseEntity {
     private String content;
 
     @Column(nullable = false)
+    private Long targetId;
+
+    @Column(nullable = false)
     private Long receiverId;
 
     private boolean isRead;
@@ -35,10 +38,12 @@ public class Notification extends BaseEntity {
     private Notification(
             NotificationType notificationType,
             String content,
+            Long targetId,
             Long receiverId
     ) {
         this.notificationType = notificationType;
         this.content = content;
+        this.targetId = targetId;
         this.receiverId = receiverId;
         isRead = false;
     }
@@ -46,14 +51,14 @@ public class Notification extends BaseEntity {
     public static Notification createNotification(
         NotificationType notificationType,
         String content,
+        Long targetId,
         Long receiverId
     ) {
-        return new Notification(notificationType, content, receiverId);
+        return new Notification(notificationType, content, targetId, receiverId);
     }
 
-
-
-
-
+    public void read() {
+        isRead = true;
+    }
 
 }
