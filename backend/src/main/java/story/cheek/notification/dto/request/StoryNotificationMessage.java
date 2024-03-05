@@ -27,6 +27,7 @@ public record StoryNotificationMessage(
     }
 
     public record Data(
+            Long targetId,
             Long receiverId,
             String content,
             NotificationType type,
@@ -35,6 +36,7 @@ public record StoryNotificationMessage(
 
         public static Data from(Notification notification) {
             return new Data(
+                    notification.getTargetId(),
                     notification.getReceiverId(),
                     notification.getContent(),
                     notification.getNotificationType(),
