@@ -3,6 +3,7 @@ package story.cheek.notification.service;
 import static story.cheek.notification.domain.NotificationType.*;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +25,7 @@ public class NotificationEventListener {
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @TransactionalEventListener
+    @Async
     public void sendStoryNotification(StoryCreateEvent storyCreateEvent) {
         Notification notification = notificationRepository.save(Notification.createNotification(
                 STORY,
@@ -36,6 +38,7 @@ public class NotificationEventListener {
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @TransactionalEventListener
+    @Async
     public void sendMentorApproveNotification(MentorApproveEvent mentorApproveEvent) {
         Notification notification = notificationRepository.save(Notification.createNotification(
                 APPROVE,
