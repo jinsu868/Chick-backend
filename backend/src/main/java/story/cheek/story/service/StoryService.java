@@ -3,9 +3,11 @@ package story.cheek.story.service;
 import static story.cheek.common.exception.ErrorCode.*;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import story.cheek.common.constant.SortType;
+import story.cheek.common.event.StoryCreateEvent;
 import story.cheek.common.exception.NotFoundHighlightException;
 import story.cheek.common.exception.NotFoundQuestionException;
 import story.cheek.common.exception.NotFoundStoryException;
@@ -31,6 +33,7 @@ public class StoryService {
     private final QuestionRepository questionRepository;
     private final HighlightRepository highlightRepository;
     private final S3Service s3Service;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Transactional
     public Long save(Member member, StoryCreateRequest request) {
@@ -47,7 +50,7 @@ public class StoryService {
                 member);
 
         storyRepository.save(story);
-
+        eventPublisher.publishEvent(new StoryCreateEvent(member.getName(), story.getId(), question.getWriter().getId()));
         return story.getId();
     }
 
