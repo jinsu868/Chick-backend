@@ -48,8 +48,8 @@ public class Member extends BaseEntity {
 
     private String providerId;
 
-    @OneToOne(mappedBy = "member")
-    private Application application;
+    @OneToMany(mappedBy = "member")
+    private List<Application> applications = new ArrayList<>();
 
     @OneToMany(mappedBy = "followingMember")
     private List<Follow> followingList = new ArrayList<>();
