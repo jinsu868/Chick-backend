@@ -72,7 +72,7 @@ public class ApplicationService {
     }
 
     private Member findMember(Application application) {
-        return memberRepository.findByApplication(application)
+        return memberRepository.findById(application.getMember().getId())
                 .orElseThrow(() -> new NotFoundMemberException(MEMBER_NOT_FOUND));
 
     }
