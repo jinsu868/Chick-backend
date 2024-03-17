@@ -20,7 +20,7 @@ public class LikeController {
 
     @PostMapping("/{storyId}")
     public ResponseEntity<Void> create(@CurrentMember Member member, @PathVariable Long storyId) {
-        Long likeId = likeService.likeStory(member, storyId);
+        Long likeId = likeService.likeStory(storyId, member);
 
         return ResponseEntity.created(URI.create("/api/v1/likes/" + likeId))
                 .build();
@@ -28,7 +28,7 @@ public class LikeController {
 
     @PostMapping("/cancellations/{storyId}")
     public ResponseEntity<Void> delete(@CurrentMember Member member, @PathVariable Long storyId) {
-        likeService.cancelStoryLike(member, storyId);
+        likeService.cancelStoryLike(storyId, member);
 
         return ResponseEntity.noContent()
                 .build();
