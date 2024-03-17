@@ -7,6 +7,7 @@ import static story.cheek.common.exception.ErrorCode.STORY_NOT_FOUND;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import story.cheek.common.annotation.RedissonLock;
 import story.cheek.common.exception.DuplicateLikeException;
 import story.cheek.common.exception.NotFoundLikeException;
 import story.cheek.common.exception.NotFoundStoryException;
@@ -23,9 +24,9 @@ public class LikeService {
     private final LikeRepository likeRepository;
     private final StoryRepository storyRepository;
 
-    @Transactional
-    public Long likeStory(Member member, Long storyId) {
-        Story story = findStory(storyId);
+    @RedissonLock(key = "like")
+    public Long likeStory(Long id, Member member) {
+        Story story = findStory(id);
         validateDuplicateLike(member);
         story.like();
         Like like = Like.createLike(member, story);
@@ -33,18 +34,17 @@ public class LikeService {
         return likeRepository.save(like).getId();
     }
 
-    @Transactional
-    public void cancelStoryLike(Member member, Long storyId) {
-        Story story = findStory(storyId);
+    @RedissonLock(key = "like")
+    public void cancelStoryLike(Long id, Member member) {
+        Story story = findStory(id);
         Like like = findLikeByMemberAndStory(member, story);
         story.dislike();
         likeRepository.delete(like);
     }
 
     private Like findLikeByMemberAndStory(Member member, Story story) {
-        Like like = likeRepository.findByMemberAndStory(member, story)
+        return likeRepository.findByMemberAndStory(member, story)
                 .orElseThrow(() -> new NotFoundLikeException(STORY_LIKE_NOT_FOUND));
-        return like;
     }
 
     private Story findStory(Long storyId) {
