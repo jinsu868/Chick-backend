@@ -44,36 +44,34 @@ public class StoryController {
     }
 
     @GetMapping("/{storyId}")
-    public ResponseEntity<StoryDetailResponse> findById(
-            @CurrentMember Member member,
-            @PathVariable Long storyId
-    ) {
+    public ResponseEntity<StoryDetailResponse> findById(@PathVariable Long storyId) {
 
-        StoryDetailResponse response = storyService.findDetailById(member, storyId);
+        StoryDetailResponse response = storyService.findDetailById(storyId);
 
         return ResponseEntity.ok(response);
     }
 
     @GetMapping
     public ResponseEntity<SliceResponse<StoryResponse>> findAll(
-            @CurrentMember Member member,
+            @RequestParam(defaultValue = "5") int pageSize,
             SortType sortType,
             @RequestParam(required = false) String cursor
     ) {
 
-        SliceResponse<StoryResponse> response = storyService.findAll(member, sortType, cursor);
+        SliceResponse<StoryResponse> response = storyService.findAll(pageSize, sortType, cursor);
 
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/highlights")
     public ResponseEntity<SliceResponse<StoryResponse>> findAllByHighlight(
+            @RequestParam(defaultValue = "5") int pageSize,
             @RequestParam("id") Long highlightId,
             SortType sortType,
             @RequestParam(required = false) String cursor
     ) {
 
-        SliceResponse<StoryResponse> response = storyService.findAllByHighlightId(highlightId, cursor, sortType);
+        SliceResponse<StoryResponse> response = storyService.findAllByHighlightId(pageSize, highlightId, cursor, sortType);
         return ResponseEntity.ok(response);
     }
 }
