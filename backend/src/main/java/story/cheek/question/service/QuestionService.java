@@ -62,8 +62,7 @@ public class QuestionService {
     }
 
     private void validateQuestionUpdate(Member member, Question question) {
-        //TODO: refactor
-        if (question.getWriter().getId() != member.getId()) {
+        if (!member.hasAuthority(question.getWriter().getId())) {
             throw new QuestionForbiddenException(FORBIDDEN_QUESTION_UPDATE);
         }
     }

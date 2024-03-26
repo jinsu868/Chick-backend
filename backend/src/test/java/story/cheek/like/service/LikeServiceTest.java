@@ -8,7 +8,6 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -17,7 +16,6 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import story.cheek.DatabaseCleanup;
 import story.cheek.member.domain.Member;
 import story.cheek.member.repository.MemberRepository;
 import story.cheek.question.domain.Occupation;
@@ -43,10 +41,11 @@ class LikeServiceTest {
     @Autowired
     QuestionRepository questionRepository;
 
-    @Autowired
-    DatabaseCleanup databaseCleanup;
-
     List<Member> members = new ArrayList<>();
+
+    Story story;
+
+    Question question;
 
     @BeforeAll
     void setUp() {
@@ -58,16 +57,17 @@ class LikeServiceTest {
             members.add(memberRepository.save(member));
         }
 
-        Member member = memberRepository.findById(1L).get();
-        Question question = questionRepository.save(
-                Question.createQuestion(Occupation.DEVELOP, "question1", "content", member));
+        question = questionRepository.save(Question.createQuestion(
+                        Occupation.DEVELOP,
+                        "question1",
+                        "content",
+                        members.get(0)));
 
-        storyRepository.save(Story.createStory(Occupation.DEVELOP, "qwe.png", question, member));
-    }
-
-    @AfterAll
-    void after() {
-        databaseCleanup.execute();
+        story = storyRepository.save(Story.createStory(
+                Occupation.DEVELOP,
+                "qwe.png",
+                question,
+                members.get(0)));
     }
 
     @Test
@@ -81,7 +81,7 @@ class LikeServiceTest {
             int memberIdx = i;
             executorService.submit(() -> {
                 try {
-                    likeService.likeStory(1L, members.get(memberIdx));
+                    likeService.likeStory(story.getId(), members.get(memberIdx));
                 } finally {
                     latch.countDown();
                 }
@@ -89,9 +89,9 @@ class LikeServiceTest {
         }
 
         latch.await();
+        Story findStory = storyRepository.findById(story.getId()).orElseThrow();
 
-        Story story = storyRepository.findById(1L).orElseThrow();
-        Assertions.assertThat(story.getLikeCount()).isEqualTo(30);
+        Assertions.assertThat(findStory.getLikeCount()).isEqualTo(30);
     }
 
     @Test
@@ -105,7 +105,7 @@ class LikeServiceTest {
             int memberIdx = i;
             executorService.submit(() -> {
                 try {
-                    likeService.cancelStoryLike(1L, members.get(memberIdx));
+                    likeService.cancelStoryLike(story.getId(), members.get(memberIdx));
                 } finally {
                     latch.countDown();
                 }
@@ -113,7 +113,8 @@ class LikeServiceTest {
         }
 
         latch.await();
-        Story story = storyRepository.findById(1L).orElseThrow();
-        Assertions.assertThat(story.getLikeCount()).isEqualTo(20);
+        Story savedStory = storyRepository.findById(story.getId()).orElseThrow();
+
+        Assertions.assertThat(savedStory.getLikeCount()).isEqualTo(20);
     }
 }
