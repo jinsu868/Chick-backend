@@ -6,10 +6,10 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import story.cheek.common.exception.BlockedMemberException;
 import story.cheek.common.exception.NotFoundQuestionException;
 import story.cheek.common.exception.QuestionForbiddenException;
 import story.cheek.member.domain.Member;
-import story.cheek.member.repository.MemberRepository;
 import story.cheek.question.domain.Question;
 import story.cheek.question.dto.request.QuestionCreateRequest;
 import story.cheek.question.dto.request.QuestionUpdateRequest;
@@ -23,9 +23,8 @@ public class QuestionService {
 
     private final QuestionRepository questionRepository;
 
-    @Transactional
     public Long save(Member member, QuestionCreateRequest request) {
-
+        validateMemberStatus(member);
         Question question = Question.createQuestion(
                 request.occupation(),
                 request.title(),
@@ -33,9 +32,7 @@ public class QuestionService {
                 member
         );
 
-        questionRepository.save(question);
-
-        return question.getId();
+        return questionRepository.save(question).getId();
     }
 
     // es로 제목 + 내용 + 직종 세가지로 조회 시 쿼리 문제가 있어서
@@ -48,7 +45,7 @@ public class QuestionService {
         Question question = questionRepository.findById(questionId)
                 .orElseThrow(() -> new NotFoundQuestionException(QUESTION_NOT_FOUND));
 
-        return QuestionDetailResponse.of(question);
+        return QuestionDetailResponse.from(question);
     }
 
     @Transactional
@@ -72,11 +69,17 @@ public class QuestionService {
     }
 
     public List<QuestionResponse> findAll(Member member) {
-        //member 읽기 권한 체크 (2차 스프린트에서 구현)
+        //TODO : 페이징 처리
 
         return questionRepository.findAllByOrderByIdDesc()
                 .stream()
                 .map(QuestionResponse::from)
                 .toList();
+    }
+
+    private void validateMemberStatus(Member member) {
+        if (!member.isActive()) {
+            throw new BlockedMemberException(INACTIVE_MEMBER);
+        }
     }
 }
