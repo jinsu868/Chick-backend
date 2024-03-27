@@ -54,7 +54,7 @@ public class StoryController {
     @GetMapping
     public ResponseEntity<SliceResponse<StoryResponse>> findAll(
             @RequestParam(defaultValue = "5") int pageSize,
-            SortType sortType,
+            @RequestParam(defaultValue = "LATEST") SortType sortType,
             @RequestParam(required = false) String cursor
     ) {
 
@@ -67,7 +67,7 @@ public class StoryController {
     public ResponseEntity<SliceResponse<StoryResponse>> findAllByHighlight(
             @RequestParam(defaultValue = "5") int pageSize,
             @RequestParam("id") Long highlightId,
-            SortType sortType,
+            @RequestParam(defaultValue = "LATEST") SortType sortType,
             @RequestParam(required = false) String cursor
     ) {
 
