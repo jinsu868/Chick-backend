@@ -1,10 +1,14 @@
 package story.cheek.question.service;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import story.cheek.common.dto.SliceResponse;
 import story.cheek.common.exception.BlockedMemberException;
 import story.cheek.common.exception.QuestionForbiddenException;
 import story.cheek.member.domain.Member;
@@ -15,6 +19,7 @@ import story.cheek.question.domain.Question;
 import story.cheek.question.dto.request.QuestionCreateRequest;
 import story.cheek.question.dto.request.QuestionUpdateRequest;
 import story.cheek.question.dto.response.QuestionDetailResponse;
+import story.cheek.question.dto.response.QuestionResponse;
 import story.cheek.question.repository.QuestionRepository;
 
 
@@ -102,6 +107,24 @@ class QuestionServiceTest {
 
     @Test
     void 질문_정보_리스트를_조회한다() {
-        // TODO : 질문 페이징 처리하기.
+        List<QuestionResponse> values = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            Question createdQuestion = Question.createQuestion(
+                    Occupation.DEVELOP,
+                    "chick",
+                    "chick 백엔드란",
+                    member
+            );
+
+            questionRepository.save(createdQuestion);
+            values.add(QuestionResponse.from(createdQuestion));
+        }
+
+        Collections.reverse(values);
+
+        SliceResponse<QuestionResponse> response = questionRepository.findAllByOrderByIdDesc(5, null,
+                Occupation.DEVELOP);
+
+        Assertions.assertThat(response.values()).usingRecursiveComparison().isEqualTo(values);
     }
 }

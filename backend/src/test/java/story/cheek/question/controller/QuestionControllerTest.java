@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,6 +23,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import story.cheek.common.dto.SliceResponse;
 import story.cheek.member.domain.Member;
 import story.cheek.member.domain.Role;
 import story.cheek.member.repository.MemberRepository;
@@ -29,6 +31,7 @@ import story.cheek.question.domain.Occupation;
 import story.cheek.question.dto.request.QuestionCreateRequest;
 import story.cheek.question.dto.request.QuestionUpdateRequest;
 import story.cheek.question.dto.response.QuestionDetailResponse;
+import story.cheek.question.dto.response.QuestionResponse;
 import story.cheek.question.service.QuestionService;
 import story.cheek.security.TokenProvider;
 
@@ -121,9 +124,32 @@ class QuestionControllerTest {
     }
 
     @Test
-    void 모든_질문을_조회한다() {
-        //TODO : 질문 페이징 처리
+    void 모든_질문을_조회한다() throws Exception {
+        SliceResponse<QuestionResponse> response = SliceResponse.of(
+                List.of(
+                        new QuestionResponse(
+                                1L,
+                                "chick",
+                                "백엔드란",
+                                "writer"
+                        ),
+                        new QuestionResponse(
+                                2L,
+                                "chick2",
+                                "프런트란",
+                                "writer2"
+                        )
+                ), null, null
+        );
+
+        given(memberRepository.findByEmail(any())).willReturn(Optional.of(member));
+        given(questionService.findAll(5, null, null)).willReturn(response);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/questions")
+                .header(AUTHORIZATION, "Bearer " + tokenProvider.createAccessToken("qwer@chick.com")))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(jsonPath("$.values[0].id").value(1L))
+                .andExpect(jsonPath("$.values[1].id").value(2L))
+                .andDo(print());
     }
-
-
 }
