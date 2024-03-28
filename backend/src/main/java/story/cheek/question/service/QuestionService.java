@@ -2,14 +2,15 @@ package story.cheek.question.service;
 
 import static story.cheek.common.exception.ErrorCode.*;
 
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import story.cheek.common.dto.SliceResponse;
 import story.cheek.common.exception.BlockedMemberException;
 import story.cheek.common.exception.NotFoundQuestionException;
 import story.cheek.common.exception.QuestionForbiddenException;
 import story.cheek.member.domain.Member;
+import story.cheek.question.domain.Occupation;
 import story.cheek.question.domain.Question;
 import story.cheek.question.dto.request.QuestionCreateRequest;
 import story.cheek.question.dto.request.QuestionUpdateRequest;
@@ -35,8 +36,6 @@ public class QuestionService {
         return questionRepository.save(question).getId();
     }
 
-    // es로 제목 + 내용 + 직종 세가지로 조회 시 쿼리 문제가 있어서
-    // 제목 + 내용을 더해서 하나로 만들어 제목에 있는 단어까지 내용으로 바로 조회하기 위해서 만들었습니다.
     private String concatenateTitleAndContent(QuestionCreateRequest request) {
         return request.title() + " " + request.content();
     }
@@ -67,13 +66,8 @@ public class QuestionService {
         }
     }
 
-    public List<QuestionResponse> findAll(Member member) {
-        //TODO : 페이징 처리
-
-        return questionRepository.findAllByOrderByIdDesc()
-                .stream()
-                .map(QuestionResponse::from)
-                .toList();
+    public SliceResponse<QuestionResponse> findAll(int pageSize, String cursor, Occupation occupation) {
+        return questionRepository.findAllByOrderByIdDesc(pageSize, cursor, occupation);
     }
 
     private void validateMemberStatus(Member member) {
