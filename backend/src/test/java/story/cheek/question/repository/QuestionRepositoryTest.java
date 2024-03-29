@@ -15,7 +15,7 @@ import story.cheek.member.repository.MemberRepository;
 import story.cheek.question.domain.Occupation;
 import story.cheek.question.domain.Question;
 import story.cheek.question.dto.response.QuestionResponse;
-import story.common.annotation.RepositoryTest;
+import story.cheek.common.annotation.RepositoryTest;
 
 @RepositoryTest
 class QuestionRepositoryTest {

@@ -1,7 +1,5 @@
 package story.cheek.story.repository;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -24,7 +22,7 @@ import story.cheek.question.domain.Question;
 import story.cheek.question.repository.QuestionRepository;
 import story.cheek.story.domain.Story;
 import story.cheek.story.dto.response.StoryResponse;
-import story.common.annotation.RepositoryTest;
+import story.cheek.common.annotation.RepositoryTest;
 
 @RepositoryTest
 class StoryRepositoryTest {
