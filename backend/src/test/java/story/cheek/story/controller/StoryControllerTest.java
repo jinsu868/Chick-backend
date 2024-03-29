@@ -140,7 +140,7 @@ class StoryControllerTest {
         );
 
         given(memberRepository.findByEmail(any())).willReturn(Optional.of(member));
-        given(storyService.findAll(5, SortType.LATEST, null)).willReturn(response);
+        given(storyService.findAll(5, SortType.LATEST, null, null)).willReturn(response);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/stories")
                 .header(AUTHORIZATION, "Bearer " + tokenProvider.createAccessToken("qwer@chick.com")))

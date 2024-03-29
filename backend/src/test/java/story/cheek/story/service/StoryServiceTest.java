@@ -130,7 +130,7 @@ class StoryServiceTest {
         }
 
         Collections.reverse(values);
-        SliceResponse<StoryResponse> response = storyService.findAll(5, SortType.LATEST, null);
+        SliceResponse<StoryResponse> response = storyService.findAll(5, SortType.LATEST, null, null);
 
         Assertions.assertThat(response.values()).usingRecursiveComparison().isEqualTo(values);
     }

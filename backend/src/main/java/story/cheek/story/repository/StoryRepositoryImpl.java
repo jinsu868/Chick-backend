@@ -64,6 +64,7 @@ public class StoryRepositoryImpl implements StoryRepositoryCustom {
                 .where(highlightIdEq(highlight),
                         ltStoryId(cursor))
                 .orderBy(story.id.desc())
+                .limit(pageSize + 1)
                 .fetch();
 
         return convertToSlice(stories, sortType, pageSize);
@@ -127,6 +128,7 @@ public class StoryRepositoryImpl implements StoryRepositoryCustom {
         }
 
         boolean hasNext = existNextPage(stories, pageSize);
+
         String nextCursor = null;
         if (hasNext) {
             nextCursor = generateCursor(stories, sortType);
