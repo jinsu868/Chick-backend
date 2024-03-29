@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import story.cheek.common.constant.SortType;
 import story.cheek.member.domain.Member;
+import story.cheek.question.domain.Occupation;
 import story.cheek.security.CurrentMember;
 import story.cheek.story.dto.request.StoryCreateRequest;
 import story.cheek.story.dto.request.StoryCreateRequestWithoutImage;
@@ -55,10 +56,11 @@ public class StoryController {
     public ResponseEntity<SliceResponse<StoryResponse>> findAll(
             @RequestParam(defaultValue = "5") int pageSize,
             @RequestParam(defaultValue = "LATEST") SortType sortType,
-            @RequestParam(required = false) String cursor
-    ) {
+            @RequestParam(required = false) String cursor,
+            @RequestParam(required = false)Occupation occupation
+            ) {
 
-        SliceResponse<StoryResponse> response = storyService.findAll(pageSize, sortType, cursor);
+        SliceResponse<StoryResponse> response = storyService.findAll(pageSize, sortType, cursor, occupation);
 
         return ResponseEntity.ok(response);
     }

@@ -16,6 +16,7 @@ import story.cheek.common.image.S3Service;
 import story.cheek.highlight.domain.Highlight;
 import story.cheek.highlight.repository.HighlightRepository;
 import story.cheek.member.domain.Member;
+import story.cheek.question.domain.Occupation;
 import story.cheek.question.domain.Question;
 import story.cheek.question.repository.QuestionRepository;
 import story.cheek.story.domain.Story;
@@ -64,12 +65,13 @@ public class StoryService {
     public SliceResponse<StoryResponse> findAll(
             int pageSize,
             SortType sortType,
-            String cursor) {
+            String cursor,
+            Occupation occupation) {
 
         if (sortType == SortType.LATEST) {
-            return storyRepository.findAllByOrderByIdDesc(pageSize, cursor, sortType);
+            return storyRepository.findAllByOrderByIdDesc(pageSize, cursor, sortType, occupation);
         }
-        return storyRepository.findAllByOrderByLikeCountDesc(pageSize, cursor, sortType);
+        return storyRepository.findAllByOrderByLikeCountDesc(pageSize, cursor, sortType, occupation);
     }
 
     public SliceResponse<StoryResponse> findAllByHighlightId(

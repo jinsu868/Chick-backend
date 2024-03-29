@@ -3,6 +3,7 @@ package story.cheek.story.repository;
 import static story.cheek.highlight.domain.QStoryHighlight.storyHighlight;
 import static story.cheek.story.domain.QStory.*;
 
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.StringExpressions;
@@ -13,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import story.cheek.common.constant.SortType;
 import story.cheek.common.dto.SliceResponse;
 import story.cheek.highlight.domain.Highlight;
+import story.cheek.question.domain.Occupation;
 import story.cheek.story.dto.response.StoryResponse;
 
 @RequiredArgsConstructor
@@ -25,7 +27,12 @@ public class StoryRepositoryImpl implements StoryRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public SliceResponse<StoryResponse> findAllByOrderByIdDesc(int pageSize, String cursor, SortType sortType) {
+    public SliceResponse<StoryResponse> findAllByOrderByIdDesc(
+            int pageSize,
+            String cursor,
+            SortType sortType,
+            Occupation occupation) {
+
         List<StoryResponse> stories = queryFactory.select(Projections.constructor(StoryResponse.class,
                 story.id,
                 story.imageUrl,
@@ -33,7 +40,7 @@ public class StoryRepositoryImpl implements StoryRepositoryCustom {
                 story.likeCount
                 ))
                 .from(story)
-                .where(ltStoryId(cursor))
+                .where(ltStoryId(cursor), occupationEq(occupation))
                 .orderBy(story.id.desc())
                 .limit(pageSize + 1)
                 .fetch();
@@ -67,7 +74,12 @@ public class StoryRepositoryImpl implements StoryRepositoryCustom {
     }
 
     @Override
-    public SliceResponse<StoryResponse> findAllByOrderByLikeCountDesc(int pageSize, String cursor, SortType sortType) {
+    public SliceResponse<StoryResponse> findAllByOrderByLikeCountDesc(
+            int pageSize,
+            String cursor,
+            SortType sortType,
+            Occupation occupation) {
+
         List<StoryResponse> stories = queryFactory.select(Projections.constructor(StoryResponse.class,
                         story.id,
                         story.imageUrl,
@@ -75,7 +87,7 @@ public class StoryRepositoryImpl implements StoryRepositoryCustom {
                         story.likeCount
                 ))
                 .from(story)
-                .where(ltStoryLikeCount(cursor))
+                .where(ltStoryLikeCount(cursor), occupationEq(occupation))
                 .orderBy(story.likeCount.desc(), story.createdAt.desc())
                 .limit(pageSize + 1)
                 .fetch();
@@ -86,6 +98,14 @@ public class StoryRepositoryImpl implements StoryRepositoryCustom {
     private BooleanExpression ltStoryId(String cursor) {
         if (cursor != null) {
             return story.id.lt(Long.valueOf(cursor));
+        }
+
+        return null;
+    }
+
+    private BooleanExpression occupationEq(Occupation occupation) {
+        if (occupation != null) {
+            return story.occupation.eq(occupation);
         }
 
         return null;
@@ -107,7 +127,10 @@ public class StoryRepositoryImpl implements StoryRepositoryCustom {
         }
 
         boolean hasNext = existNextPage(stories, pageSize);
-        String nextCursor = generateCursor(stories, sortType);
+        String nextCursor = null;
+        if (hasNext) {
+            nextCursor = generateCursor(stories, sortType);
+        }
 
         return SliceResponse.of(stories, hasNext, nextCursor);
     }
