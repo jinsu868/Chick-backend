@@ -16,6 +16,7 @@ import story.cheek.common.image.S3Service;
 import story.cheek.highlight.domain.Highlight;
 import story.cheek.highlight.repository.HighlightRepository;
 import story.cheek.member.domain.Member;
+import story.cheek.question.domain.Occupation;
 import story.cheek.question.domain.Question;
 import story.cheek.question.repository.QuestionRepository;
 import story.cheek.story.domain.Story;
@@ -54,34 +55,33 @@ public class StoryService {
         return story.getId();
     }
 
-    public StoryDetailResponse findDetailById(Member member, Long storyId) {
-        // TODO: 접근 권한 체크 NOT GUEST & BLIND (2차 스프린트)
-
+    public StoryDetailResponse findDetailById(Long storyId) {
         Story story = storyRepository.findById(storyId)
                 .orElseThrow(() -> new NotFoundStoryException(STORY_NOT_FOUND));
 
-        return StoryDetailResponse.of(story);
+        return StoryDetailResponse.from(story);
     }
 
     public SliceResponse<StoryResponse> findAll(
-            Member member,
+            int pageSize,
             SortType sortType,
-            String cursor) {
-        // TODO: 접근 권한 체크 NOT GUEST & BLIND (2차 스프린트)
+            String cursor,
+            Occupation occupation) {
 
         if (sortType == SortType.LATEST) {
-            return storyRepository.findAllByOrderByIdDesc(cursor, sortType);
+            return storyRepository.findAllByOrderByIdDesc(pageSize, cursor, sortType, occupation);
         }
-        return storyRepository.findAllByOrderByLikeCountDesc(cursor, sortType);
+        return storyRepository.findAllByOrderByLikeCountDesc(pageSize, cursor, sortType, occupation);
     }
 
     public SliceResponse<StoryResponse> findAllByHighlightId(
+            int pageSize,
             Long highlightId,
             String cursor,
             SortType sortType
     ) {
         Highlight highlight = findHighlight(highlightId);
-        return storyRepository.findAllByHighlightOrderByIdDesc(cursor, highlight, sortType);
+        return storyRepository.findAllByHighlightOrderByIdDesc(pageSize, cursor, highlight, sortType);
     }
 
     private Highlight findHighlight(Long highlightId) {
