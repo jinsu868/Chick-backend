@@ -3,3 +3,4 @@ devops/elk/logstash/.env
 
 /.idea
 /.gradle
+.DS_Store
