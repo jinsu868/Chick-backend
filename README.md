@@ -53,7 +53,6 @@ Java, Spring, Swagger, Spring Security, Spring Data JPA, Querydsl, MySQL, Redis,
 
 ## 🚀 Trouble Shooting
 * [좋아요 동시성 처리](https://jinsu868.github.io/%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8/64/)
-* [커서 기반 페이지네이션 처리](https://jinsu868.github.io/%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8/63/)
 * [JPA OneToOne 즉시로딩 문제](https://jinsu868.github.io/%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8/65/)
 
 
